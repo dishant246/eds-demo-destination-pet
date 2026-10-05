@@ -1,0 +1,16 @@
+{
+  "variantName": "video-overlay",
+  "baseBlock": "video",
+  "canonicalModel": "standalone",
+  "visualCharacteristics": "content-width 16:9 self-hosted video shown as a poster frame with a centered circular play-button overlay; click swaps in native video player",
+  "contentPattern": "Single content-width self-hosted video (.webm/.mp4). row1: video URL (link); optional row: poster image",
+  "usage": {
+    "pagesUsing": [
+      "https://www.destinationpet.com/join-our-pack/life-at-dp/"
+    ],
+    "reuseCount": 1,
+    "lastUsed": "2026-10-05T00:00:00.000Z"
+  },
+  "options": [],
+  "memberVariantIds": []
+}

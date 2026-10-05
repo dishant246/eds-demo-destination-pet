@@ -1,0 +1,59 @@
+/* accordion-faq: structural layout only (no brand colour/typography) */
+.accordion-faq {
+  width: 100%;
+}
+
+.accordion-faq .accordion-faq-item {
+  border-bottom: 1px solid;
+  border-color: color-mix(in srgb, currentcolor 15%, transparent);
+}
+
+.accordion-faq .accordion-faq-item:first-child {
+  border-top: 1px solid;
+  border-top-color: color-mix(in srgb, currentcolor 15%, transparent);
+}
+
+.accordion-faq .accordion-faq-item-label {
+  position: relative;
+  display: block;
+  padding: 1rem 2.5rem 1rem 0;
+  cursor: pointer;
+  list-style: none;
+}
+
+.accordion-faq .accordion-faq-item-label::-webkit-details-marker {
+  display: none;
+}
+
+.accordion-faq .accordion-faq-item-label > * {
+  margin: 0;
+}
+
+.accordion-faq .accordion-faq-item-label::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  right: 0.5rem;
+  width: 0.6em;
+  height: 0.6em;
+  border-right: 2px solid;
+  border-bottom: 2px solid;
+  transform: translateY(-75%) rotate(45deg);
+  transition: transform 0.2s;
+}
+
+.accordion-faq .accordion-faq-item[open] > .accordion-faq-item-label::after {
+  transform: translateY(-25%) rotate(-135deg);
+}
+
+.accordion-faq .accordion-faq-item-body {
+  padding: 0 0 1rem;
+}
+
+.accordion-faq .accordion-faq-item-body > :first-child {
+  margin-top: 0;
+}
+
+.accordion-faq .accordion-faq-item-body > :last-child {
+  margin-bottom: 0;
+}

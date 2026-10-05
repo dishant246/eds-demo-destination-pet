@@ -1,0 +1,16 @@
+{
+  "variantName": "accordion-split",
+  "baseBlock": "accordion",
+  "canonicalModel": "standalone",
+  "visualCharacteristics": "two side-by-side columns (stacked on mobile); each column has a centered group title above a white panel of expandable items with plus/minus indicators",
+  "contentPattern": "group row: [group title H2] (single cell, starts a new column); item rows: [title | richtext body] x3 per group, 2 groups",
+  "usage": {
+    "pagesUsing": [
+      "https://www.destinationpet.com/join-our-pack/life-at-dp/"
+    ],
+    "reuseCount": 1,
+    "lastUsed": "2026-10-05T00:00:00.000Z"
+  },
+  "options": [],
+  "memberVariantIds": []
+}

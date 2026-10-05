@@ -1,0 +1,61 @@
+/* columns-links: structural layout only (no brand colour/typography) */
+.columns-links .columns-links-row {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.columns-links .columns-links-row + .columns-links-row {
+  margin-top: 1.5rem;
+}
+
+.columns-links .columns-links-col {
+  flex: 1 1 0;
+  min-width: 0;
+  text-align: center;
+}
+
+.columns-links .columns-links-col > :first-child {
+  margin-top: 0;
+}
+
+.columns-links .columns-links-col > :last-child {
+  margin-bottom: 0;
+}
+
+/* single link -> centered button */
+.columns-links .columns-links-single .button-container {
+  margin: 0;
+}
+
+/* several links -> compact link list */
+.columns-links .columns-links-list p,
+.columns-links .columns-links-list li {
+  margin: 0 0 0.25rem;
+}
+
+.columns-links .columns-links-items {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.columns-links .columns-links-list .button-container {
+  margin: 0 0 0.5rem;
+}
+
+@media (width >= 600px) {
+  .columns-links.columns-links-4-cols .columns-links-row {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (width >= 900px) {
+  .columns-links .columns-links-row,
+  .columns-links.columns-links-4-cols .columns-links-row {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+  }
+}

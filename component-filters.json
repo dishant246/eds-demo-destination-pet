@@ -9,22 +9,49 @@
     "id": "section",
     "components": [
       "accordion",
+      "accordion-faq",
+      "accordion-split",
       "button",
       "cards",
+      "cards-circle-cta",
+      "cards-logos",
+      "cards-promo",
+      "cards-values",
       "carousel",
+      "carousel-steps",
+      "carousel-testimonial",
       "columns",
+      "columns-links",
+      "columns-media",
       "embed",
-      "fragment",
+      "embed-form",
       "form",
+      "fragment",
       "hero",
+      "hero-banner",
       "image",
       "quote",
+      "quote-testimonial",
       "search",
-      "tabs",
       "table",
+      "tabs",
       "text",
       "title",
-      "video"
+      "video",
+      "video-overlay"
+    ]
+  },
+  {
+    "id": "accordion-faq",
+    "components": [
+      "accordion-faq-item"
+    ]
+  },
+  {
+    "id": "accordion-split",
+    "components": [
+      "accordion-split-item",
+      "accordion-split-group"
     ]
   },
   {
@@ -34,15 +61,63 @@
     ]
   },
   {
+    "id": "cards-circle-cta",
+    "components": [
+      "cards-circle-cta-card"
+    ]
+  },
+  {
+    "id": "cards-logos",
+    "components": [
+      "cards-logos-card"
+    ]
+  },
+  {
+    "id": "cards-promo",
+    "components": [
+      "cards-promo-card"
+    ]
+  },
+  {
+    "id": "cards-values",
+    "components": [
+      "cards-values-card"
+    ]
+  },
+  {
     "id": "cards",
     "components": [
       "card"
     ]
   },
   {
+    "id": "carousel-steps",
+    "components": [
+      "carousel-steps-item"
+    ]
+  },
+  {
+    "id": "carousel-testimonial",
+    "components": [
+      "carousel-testimonial-item"
+    ]
+  },
+  {
     "id": "carousel",
     "components": [
       "carousel-item"
+    ]
+  },
+  {
+    "id": "columns-links",
+    "components": [
+      "column"
+    ]
+  },
+  {
+    "id": "columns-media",
+    "components": [
+      "column"
     ]
   },
   {
@@ -89,6 +164,10 @@
     "components": [
       "tabs-item"
     ]
+  },
+  {
+    "id": "video-overlay",
+    "components": []
   },
   {
     "id": "video",

@@ -1,0 +1,13 @@
+{
+  "status": "success",
+  "url": "https://www.destinationpet.com/live-webinar/",
+  "path": "live-webinar",
+  "timestamp": "2026-10-05T13:46:19.316Z",
+  "title": "A Series of Webinars | Destination Pet",
+  "template": "content-landing-page",
+  "blocks": [
+    "hero-banner",
+    "quote-testimonial",
+    "columns-links"
+  ]
+}

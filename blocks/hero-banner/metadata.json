@@ -1,0 +1,16 @@
+{
+  "variantName": "hero-banner",
+  "baseBlock": "hero",
+  "canonicalModel": "standalone",
+  "visualCharacteristics": "full-bleed photo background, centered white H1, no CTA",
+  "contentPattern": "row1: image (hero banner photo); row2: text (H1)",
+  "usage": {
+    "pagesUsing": [
+      "https://www.destinationpet.com/"
+    ],
+    "reuseCount": 1,
+    "lastUsed": "2026-10-05T12:32:31.738Z"
+  },
+  "options": [],
+  "memberVariantIds": []
+}

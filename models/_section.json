@@ -33,6 +33,22 @@
             {
               "name": "Highlight",
               "value": "highlight"
+            },
+            {
+              "name": "Tertiary (beige)",
+              "value": "tertiary"
+            },
+            {
+              "name": "Secondary (light blue)",
+              "value": "secondary"
+            },
+            {
+              "name": "Primary (navy)",
+              "value": "primary"
+            },
+            {
+              "name": "Light Blue",
+              "value": "light-blue"
             }
           ]
         }
@@ -44,22 +60,36 @@
       "id": "section",
       "components": [
         "accordion",
+        "accordion-faq",
+        "accordion-split",
         "button",
         "cards",
+        "cards-circle-cta",
+        "cards-logos",
+        "cards-promo",
+        "cards-values",
         "carousel",
+        "carousel-steps",
+        "carousel-testimonial",
         "columns",
+        "columns-links",
+        "columns-media",
         "embed",
-        "fragment",
+        "embed-form",
         "form",
+        "fragment",
         "hero",
+        "hero-banner",
         "image",
         "quote",
+        "quote-testimonial",
         "search",
-        "tabs",
         "table",
+        "tabs",
         "text",
         "title",
-        "video"
+        "video",
+        "video-overlay"
       ]
     }
   ]

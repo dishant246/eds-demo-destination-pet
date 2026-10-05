@@ -1,0 +1,16 @@
+{
+  "variantName": "accordion-faq",
+  "baseBlock": "accordion",
+  "canonicalModel": "standalone",
+  "visualCharacteristics": "full-width stacked FAQ list separated by thin dividers; large question labels, answer paragraph revealed below; first item open by default",
+  "contentPattern": "4 expandable Q&A items. Each row = [question text] | [answer rich text]",
+  "usage": {
+    "pagesUsing": [
+      "https://www.destinationpet.com/sell-your-business/sell-your-veterinary-practice/"
+    ],
+    "reuseCount": 1,
+    "lastUsed": "2026-10-05T00:00:00.000Z"
+  },
+  "options": [],
+  "memberVariantIds": []
+}

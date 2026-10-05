@@ -1,0 +1,70 @@
+{
+  "definitions": [
+    {
+      "title": "Carousel Testimonial",
+      "id": "carousel-testimonial",
+      "plugins": {
+        "xwalk": {
+          "page": {
+            "resourceType": "core/franklin/components/block/v1/block",
+            "template": {
+              "name": "Carousel Testimonial",
+              "filter": "carousel-testimonial"
+            }
+          }
+        }
+      }
+    },
+    {
+      "title": "Carousel Testimonial Item",
+      "id": "carousel-testimonial-item",
+      "plugins": {
+        "xwalk": {
+          "page": {
+            "resourceType": "core/franklin/components/block/v1/block/item",
+            "template": {
+              "name": "Carousel Testimonial Item",
+              "model": "carousel-testimonial-item"
+            }
+          }
+        }
+      }
+    }
+  ],
+  "models": [
+    {
+      "id": "carousel-testimonial-item",
+      "fields": [
+        {
+          "component": "richtext",
+          "valueType": "string",
+          "name": "media_image",
+          "label": "Background Image",
+          "multi": false
+        },
+        {
+          "component": "text",
+          "valueType": "string",
+          "name": "media_imageAlt",
+          "value": "",
+          "label": "Bacgkround Alt"
+        },
+        {
+          "component": "richtext",
+          "name": "content_text",
+          "value": "",
+          "label": "Text",
+          "valueType": "string"
+        }
+      ]
+    }
+  ],
+  "filters": [
+    {
+      "id": "carousel-testimonial",
+      "components": [
+        "carousel-testimonial-item"
+      ]
+    }
+  ]
+}

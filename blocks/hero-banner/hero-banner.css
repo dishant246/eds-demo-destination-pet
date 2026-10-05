@@ -1,0 +1,69 @@
+.hero-banner-container .hero-banner-wrapper {
+  max-width: unset;
+  padding: 0;
+}
+
+.hero-banner {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 360px;
+  overflow: hidden;
+  box-sizing: border-box;
+  padding: 48px 24px;
+}
+
+.hero-banner .hero-banner-media {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
+
+.hero-banner .hero-banner-media picture {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.hero-banner .hero-banner-media img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.hero-banner .hero-banner-content {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: 1200px;
+  text-align: center;
+}
+
+.hero-banner .hero-banner-content > :first-child {
+  margin-top: 0;
+}
+
+.hero-banner .hero-banner-content > :last-child {
+  margin-bottom: 0;
+}
+
+@media (width >= 600px) {
+  .hero-banner {
+    min-height: 480px;
+  }
+}
+
+@media (width >= 900px) {
+  .hero-banner {
+    min-height: 640px;
+    padding: 64px 32px;
+  }
+}
+
+@media (width >= 1200px) {
+  .hero-banner .hero-banner-content {
+    max-width: 1000px;
+  }
+}

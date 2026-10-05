@@ -1,0 +1,251 @@
+{
+  "metadata": {
+    "projectType": "xwalk"
+  },
+  "templates": [
+    {
+      "name": "content-landing-page",
+      "urls": [
+        "https://www.destinationpet.com/",
+        "https://www.destinationpet.com/about-us/about/",
+        "https://www.destinationpet.com/about-us/get-in-touch/",
+        "https://www.destinationpet.com/about-us/meet-the-team/business-development-leaders/",
+        "https://www.destinationpet.com/about-us/meet-the-team/leadership/",
+        "https://www.destinationpet.com/join-our-pack/find-a-veterinary-externship/",
+        "https://www.destinationpet.com/join-our-pack/life-at-dp/",
+        "https://www.destinationpet.com/live-webinar/",
+        "https://www.destinationpet.com/live-webinar/webinar-redirect/",
+        "https://www.destinationpet.com/live-webinar/webinar-registration/",
+        "https://www.destinationpet.com/live-webinar/webinar-viewing-previous/",
+        "https://www.destinationpet.com/live-webinar/webinars-for-pet/",
+        "https://www.destinationpet.com/our-locations/",
+        "https://www.destinationpet.com/sell-your-business/",
+        "https://www.destinationpet.com/sell-your-business/sell-your-pet-resort/",
+        "https://www.destinationpet.com/sell-your-business/sell-your-veterinary-practice/"
+      ],
+      "coverageGaps": [],
+      "description": "Hero teaser banner followed by stacked content sections with two- and three-column card/teaser grids and call-to-action bands",
+      "blocks": [
+        {
+          "name": "hero-banner",
+          "instances": [
+            ".hero.teaser"
+          ]
+        },
+        {
+          "name": "columns-media",
+          "instances": [
+            ".mediainfo"
+          ]
+        },
+        {
+          "name": "cards-values",
+          "instances": [
+            ".columncontainer.remPaddingBottom",
+            ".columncontainer:not(.remPaddingBottom):has(> .column-container > .container > .cmp-container > .row > .container__column:first-child > .infocards):not(:has(.info-card__text .button))"
+          ]
+        },
+        {
+          "name": "cards-promo",
+          "instances": [
+            ".infocards.info-card--center.remPaddingBottom"
+          ]
+        },
+        {
+          "name": "quote-testimonial",
+          "instances": [
+            ".container__column > .testimonialscard"
+          ]
+        },
+        {
+          "name": "cards-circle-cta",
+          "instances": [
+            ".columncontainer:has(> .column-container > .container > .cmp-container > .row > .container__column:first-child > .infocards .info-card__text > .cmp-container > .button:only-child)"
+          ]
+        },
+        {
+          "name": "cards-logos",
+          "instances": [
+            ".columncontainer.background-color--primary + .columncontainer"
+          ]
+        },
+        {
+          "name": "carousel-testimonial",
+          "instances": [
+            ".carousel.panelcontainer:has(.testimonialscard)"
+          ]
+        },
+        {
+          "name": "carousel-steps",
+          "instances": [
+            ".carousel.panelcontainer:has(.infocards)"
+          ]
+        },
+        {
+          "name": "accordion-faq",
+          "instances": [
+            ".container__column:not(.col-md-6) > .accordion.panelcontainer"
+          ]
+        },
+        {
+          "name": "accordion-split",
+          "instances": [
+            ".columncontainer:has(> .column-container > .container > .cmp-container > .row > .container__column.col-md-6 > .accordion)"
+          ]
+        },
+        {
+          "name": "video-overlay",
+          "instances": [
+            ".video:has(.video__overlay)"
+          ]
+        },
+        {
+          "name": "embed-form",
+          "instances": [
+            ".rawhtml:has(iframe)"
+          ]
+        },
+        {
+          "name": "columns-links",
+          "instances": [
+            ".columncontainer:has(> .column-container > .container > .cmp-container > .row > .container__column + .container__column > .button)",
+            ".columncontainer:has(> .column-container > .container > .cmp-container > .row > .container__column > .link)"
+          ]
+        }
+      ],
+      "sections": [
+        {
+          "id": "1",
+          "name": "Hero banner",
+          "selector": [
+            ".hero.teaser"
+          ],
+          "style": null,
+          "blocks": [
+            "hero-banner"
+          ],
+          "defaultContent": []
+        },
+        {
+          "id": "2",
+          "name": "Who We Are",
+          "selector": [
+            ".mediainfo.media-info--padding-tb-sm"
+          ],
+          "style": null,
+          "blocks": [
+            "columns-media"
+          ],
+          "defaultContent": []
+        },
+        {
+          "id": "3",
+          "name": "We work together to be...",
+          "selector": [
+            ".mediainfo + .columncontainer.background-color--tertiary.spacing__top-bottom--40px"
+          ],
+          "style": "tertiary",
+          "blocks": [
+            "cards-values"
+          ],
+          "defaultContent": [
+            ".title.text-center",
+            ".container__column > .button"
+          ]
+        },
+        {
+          "id": "4",
+          "name": "Sell your business band",
+          "selector": [
+            ".columncontainer.spacing__top--40px"
+          ],
+          "style": null,
+          "blocks": [
+            "cards-promo"
+          ],
+          "defaultContent": []
+        },
+        {
+          "id": "5",
+          "name": "Testimonials",
+          "selector": [
+            ".columncontainer.spacing__top--40px + .columncontainer.background-color--tertiary.spacing__top-bottom--40px"
+          ],
+          "style": "tertiary",
+          "blocks": [
+            "quote-testimonial"
+          ],
+          "defaultContent": [
+            ".title.text-center"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "empty-section-hub",
+      "urls": [
+        "https://www.destinationpet.com/about-us/"
+      ],
+      "coverageGaps": [],
+      "description": "Section hub page with only global header and footer and no body content",
+      "blocks": []
+    },
+    {
+      "name": "legal-text-page",
+      "urls": [
+        "https://www.destinationpet.com/about-us/ccpa-request/",
+        "https://www.destinationpet.com/about-us/tradeshows-events/",
+        "https://www.destinationpet.com/privacy-policy/",
+        "https://www.destinationpet.com/terms-and-conditions/"
+      ],
+      "coverageGaps": [],
+      "description": "Single-column long-form text page with heading and many stacked rich-text paragraphs",
+      "blocks": []
+    },
+    {
+      "name": "hero-feature-showcase",
+      "urls": [
+        "https://www.destinationpet.com/about-us/destination-pet-foundation/"
+      ],
+      "coverageGaps": [],
+      "description": "Hero teaser banner followed by a grouped feature row, a standalone content band, and two- and three-column grids",
+      "blocks": []
+    },
+    {
+      "name": "empty-subsection-hub",
+      "urls": [
+        "https://www.destinationpet.com/about-us/meet-the-team/"
+      ],
+      "coverageGaps": [],
+      "description": "Nested subsection hub page with only global header and footer and no body content",
+      "blocks": []
+    },
+    {
+      "name": "html-sitemap",
+      "urls": [
+        "https://www.destinationpet.com/html-sitemap/"
+      ],
+      "coverageGaps": [],
+      "description": "Hierarchical link listing with grouped subheadings and nested lists of page links",
+      "blocks": []
+    },
+    {
+      "name": "empty-top-level-hub",
+      "urls": [
+        "https://www.destinationpet.com/join-our-pack/"
+      ],
+      "coverageGaps": [],
+      "description": "Top-level hub page with only global header and footer and no body content",
+      "blocks": []
+    },
+    {
+      "name": "location-finder",
+      "urls": [
+        "https://www.destinationpet.com/our-locations/location/"
+      ],
+      "coverageGaps": [],
+      "description": "Two-column locator with intro text, search field and map view toggle beside an interactive map, followed by a colored column band",
+      "blocks": []
+    }
+  ]
+}

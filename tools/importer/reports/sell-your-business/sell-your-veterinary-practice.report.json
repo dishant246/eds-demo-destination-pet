@@ -1,0 +1,15 @@
+{
+  "status": "success",
+  "url": "https://www.destinationpet.com/sell-your-business/sell-your-veterinary-practice/",
+  "path": "sell-your-business/sell-your-veterinary-practice",
+  "timestamp": "2026-10-05T13:47:05.999Z",
+  "title": "Sell your veterinary practice | Destination Pet",
+  "template": "content-landing-page",
+  "blocks": [
+    "hero-banner",
+    "cards-values",
+    "carousel-testimonial",
+    "carousel-steps",
+    "accordion-faq"
+  ]
+}

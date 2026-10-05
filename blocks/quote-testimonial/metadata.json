@@ -1,0 +1,16 @@
+{
+  "variantName": "quote-testimonial",
+  "baseBlock": "quote",
+  "canonicalModel": "standalone",
+  "visualCharacteristics": "centered testimonial with decorative quote marks + bold-name attribution, on tertiary bg",
+  "contentPattern": "quotation: p; attribution: \"Bethanie Nix, CSR/Kennel Tech\"",
+  "usage": {
+    "pagesUsing": [
+      "https://www.destinationpet.com/"
+    ],
+    "reuseCount": 1,
+    "lastUsed": "2026-10-05T12:33:56.231Z"
+  },
+  "options": [],
+  "memberVariantIds": []
+}

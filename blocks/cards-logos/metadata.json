@@ -1,0 +1,16 @@
+{
+  "variantName": "cards-logos",
+  "baseBlock": "cards",
+  "canonicalModel": "standalone",
+  "visualCharacteristics": "white bg, responsive 2/3/4-up grid of centered linked brand-logo images (large, ~square), optional small caption (h3 city or grey p) below, no card chrome; column count chosen from item count (1-2 -> 2, 3/5/6 -> 3, 4/7+ -> 4)",
+  "contentPattern": "N card rows: [image (linked to location site)] | [optional caption: h3 or p; may be empty] | [optional logo link]",
+  "usage": {
+    "pagesUsing": [
+      "https://www.destinationpet.com/our-locations/"
+    ],
+    "reuseCount": 1,
+    "lastUsed": "2026-10-05T00:00:00.000Z"
+  },
+  "options": [],
+  "memberVariantIds": []
+}

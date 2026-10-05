@@ -1,0 +1,16 @@
+{
+  "variantName": "cards-circle-cta",
+  "baseBlock": "cards",
+  "canonicalModel": "standalone",
+  "visualCharacteristics": "3-col centered, large circular photo with thin orange ring, orange solid CTA button below, no text, white bg",
+  "contentPattern": "3 rows x 2 cells: [image] | [p > a (button)]",
+  "usage": {
+    "pagesUsing": [
+      "https://www.destinationpet.com/sell-your-business/"
+    ],
+    "reuseCount": 1,
+    "lastUsed": "2026-10-05T00:00:00.000Z"
+  },
+  "options": [],
+  "memberVariantIds": []
+}

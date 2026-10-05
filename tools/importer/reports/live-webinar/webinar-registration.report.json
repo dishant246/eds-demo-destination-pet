@@ -1,0 +1,12 @@
+{
+  "status": "success",
+  "url": "https://www.destinationpet.com/live-webinar/webinar-registration/",
+  "path": "live-webinar/webinar-registration",
+  "timestamp": "2026-10-05T13:46:29.670Z",
+  "title": "Webinar Registration - Destination Pet",
+  "template": "content-landing-page",
+  "blocks": [
+    "hero-banner",
+    "embed-form"
+  ]
+}

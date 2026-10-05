@@ -1,0 +1,16 @@
+{
+  "variantName": "cards-promo",
+  "baseBlock": "cards",
+  "canonicalModel": "standalone",
+  "visualCharacteristics": "single centered narrow card, line-art image + paragraph + orange CTA button, white bg",
+  "contentPattern": "1 card row: [image (handshake)] | [p, a (Sell your business)]",
+  "usage": {
+    "pagesUsing": [
+      "https://www.destinationpet.com/"
+    ],
+    "reuseCount": 1,
+    "lastUsed": "2026-10-05T12:33:34.508Z"
+  },
+  "options": [],
+  "memberVariantIds": []
+}

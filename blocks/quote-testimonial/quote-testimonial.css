@@ -1,0 +1,59 @@
+.quote-testimonial .quote-testimonial-figure {
+  position: relative;
+  margin: 0 auto;
+  padding: 48px 16px;
+  max-width: 1200px;
+  text-align: center;
+}
+
+.quote-testimonial .quote-testimonial-figure::before,
+.quote-testimonial .quote-testimonial-figure::after {
+  position: absolute;
+  left: 0;
+  font-size: 3em;
+  line-height: 1;
+}
+
+.quote-testimonial .quote-testimonial-figure::before {
+  content: '“';
+  top: 0;
+}
+
+.quote-testimonial .quote-testimonial-figure::after {
+  content: '”';
+  bottom: 0;
+}
+
+.quote-testimonial .quote-testimonial-quotation {
+  margin: 0;
+}
+
+.quote-testimonial .quote-testimonial-quotation > :first-child,
+.quote-testimonial .quote-testimonial-attribution > :first-child {
+  margin-top: 0;
+}
+
+.quote-testimonial .quote-testimonial-quotation > :last-child,
+.quote-testimonial .quote-testimonial-attribution > :last-child {
+  margin-bottom: 0;
+}
+
+.quote-testimonial .quote-testimonial-attribution {
+  margin-top: 16px;
+}
+
+.quote-testimonial .quote-testimonial-attribution cite {
+  font-style: normal;
+}
+
+@media (width >= 600px) {
+  .quote-testimonial .quote-testimonial-figure {
+    padding: 48px 24px;
+  }
+}
+
+@media (width >= 900px) {
+  .quote-testimonial .quote-testimonial-figure {
+    padding: 56px 32px;
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "variantName": "carousel-testimonial",
+  "baseBlock": "carousel",
+  "canonicalModel": "standalone",
+  "visualCharacteristics": "full-width text-only testimonial slider on tertiary section; optional name heading, quote text with attribution line, centered dot navigation, no arrows, no images",
+  "contentPattern": "2-slide testimonial slider, quote text + attribution, no images. Each row = one slide: [image (empty)] | [richtext: optional name heading, quote paragraph(s), attribution paragraph]",
+  "usage": {
+    "pagesUsing": [
+      "https://www.destinationpet.com/sell-your-business/sell-your-veterinary-practice/"
+    ],
+    "reuseCount": 1,
+    "lastUsed": "2026-10-05T00:00:00.000Z"
+  },
+  "options": [],
+  "memberVariantIds": []
+}

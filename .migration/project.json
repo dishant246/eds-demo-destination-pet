@@ -1,0 +1,18 @@
+{
+  "type": "xwalk",
+  "sites": {
+    "eds-demo-destination-pet": {
+      "libraryUrl": "https://main--sta-xwalk-boilerplate--aemysites.aem.page/tools/sidekick/library.json",
+      "previewOrg": "dishant246",
+      "previewSite": "eds-demo-destination-pet",
+      "contentHostUrl": "author-p10903-e844381.adobeaemcloud.com",
+      "aemSitePath": "/content/eds-demo-destination-pet",
+      "aemAssetsFolderPath": "/content/dam/eds-demo-destination-pet",
+      "aemSiteName": "eds-demo-destination-pet",
+      "aemSiteTitle": "eds-demo-destination-pet"
+    }
+  },
+  "features": [
+    "site-planning"
+  ]
+}

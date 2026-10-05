@@ -1,0 +1,76 @@
+/* carousel-testimonial: structural layout only (no brand colour/typography) */
+.carousel-testimonial {
+  position: relative;
+}
+
+.carousel-testimonial .carousel-testimonial-slides,
+.carousel-testimonial .carousel-testimonial-dots {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.carousel-testimonial .carousel-testimonial-slides {
+  display: flex;
+  overflow: scroll clip;
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+  scrollbar-width: none;
+}
+
+.carousel-testimonial .carousel-testimonial-slides::-webkit-scrollbar {
+  display: none;
+}
+
+.carousel-testimonial .carousel-testimonial-slide {
+  flex: 0 0 100%;
+  width: 100%;
+  scroll-snap-align: start;
+  box-sizing: border-box;
+}
+
+.carousel-testimonial .carousel-testimonial-quote {
+  margin: 0;
+  padding: 0;
+}
+
+.carousel-testimonial .carousel-testimonial-content > :first-child {
+  margin-top: 0;
+}
+
+.carousel-testimonial .carousel-testimonial-content > :last-child {
+  margin-bottom: 0;
+}
+
+.carousel-testimonial .carousel-testimonial-nav {
+  margin-top: 1rem;
+}
+
+.carousel-testimonial .carousel-testimonial-dots {
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.carousel-testimonial .carousel-testimonial-dot {
+  display: block;
+  width: 10px;
+  height: 10px;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background-color: currentcolor;
+  opacity: 0.3;
+  cursor: pointer;
+}
+
+.carousel-testimonial .carousel-testimonial-dot[aria-current='true'] {
+  opacity: 1;
+}
+
+@media (width >= 900px) {
+  .carousel-testimonial .carousel-testimonial-slide {
+    padding: 0 1rem;
+  }
+}

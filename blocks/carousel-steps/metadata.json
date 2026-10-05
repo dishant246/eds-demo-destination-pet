@@ -1,0 +1,16 @@
+{
+  "variantName": "carousel-steps",
+  "baseBlock": "carousel",
+  "canonicalModel": "standalone",
+  "visualCharacteristics": "one-up centered step slider: large line-art icon stacked above a numbered step title (h3), dot navigation below, no arrows",
+  "contentPattern": "5-step carousel, icon + H3 per slide. Each row = one step: [icon image] | [h3 numbered step title, optional text]",
+  "usage": {
+    "pagesUsing": [
+      "https://www.destinationpet.com/sell-your-business/sell-your-veterinary-practice/"
+    ],
+    "reuseCount": 1,
+    "lastUsed": "2026-10-05T00:00:00.000Z"
+  },
+  "options": [],
+  "memberVariantIds": []
+}

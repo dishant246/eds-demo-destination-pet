@@ -1,0 +1,16 @@
+{
+  "variantName": "cards-values",
+  "baseBlock": "cards",
+  "canonicalModel": "standalone",
+  "visualCharacteristics": "3-col centered, illustrated badge image + navy title + tagline + text, on tertiary bg",
+  "contentPattern": "3 card rows, each: [image] | [h2? title, h3 tagline, p]",
+  "usage": {
+    "pagesUsing": [
+      "https://www.destinationpet.com/"
+    ],
+    "reuseCount": 1,
+    "lastUsed": "2026-10-05T12:33:34.306Z"
+  },
+  "options": [],
+  "memberVariantIds": []
+}

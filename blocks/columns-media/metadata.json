@@ -1,0 +1,16 @@
+{
+  "variantName": "columns-media",
+  "baseBlock": "columns",
+  "canonicalModel": "standalone",
+  "visualCharacteristics": "light bg, image left / orange H2 + H3 + bold paragraph right",
+  "contentPattern": "1 row x 2 cells: [image] | [h2, h3, p]",
+  "usage": {
+    "pagesUsing": [
+      "https://www.destinationpet.com/"
+    ],
+    "reuseCount": 1,
+    "lastUsed": "2026-10-05T12:33:10.811Z"
+  },
+  "options": [],
+  "memberVariantIds": []
+}

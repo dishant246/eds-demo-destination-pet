@@ -1,0 +1,16 @@
+{
+  "variantName": "columns-links",
+  "baseBlock": "columns",
+  "canonicalModel": "standalone",
+  "visualCharacteristics": "equal-width columns of centered links only (no images); links render either as buttons (one bold link per cell) or as small compact text-link lists (state index)",
+  "contentPattern": "1 row x N columns (3 or 4): each cell = <p><strong><a>label</a></strong></p> (button) or a list/paragraphs of anchor links",
+  "usage": {
+    "pagesUsing": [
+      "https://www.destinationpet.com/our-locations/"
+    ],
+    "reuseCount": 1,
+    "lastUsed": "2026-10-05T00:00:00.000Z"
+  },
+  "options": [],
+  "memberVariantIds": []
+}

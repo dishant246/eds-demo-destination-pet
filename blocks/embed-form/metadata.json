@@ -1,0 +1,17 @@
+{
+  "variantName": "embed-form",
+  "baseBlock": "embed",
+  "canonicalModel": "standalone",
+  "visualCharacteristics": "centered content-width (~650px) card hosting a tall third-party form iframe (Jotform); section background band supplied by section metadata",
+  "contentPattern": "single row/cell: link to the third-party form URL (e.g. https://form.jotform.com/243036742942154), optional link text used as iframe title; rendered as lazy-loaded generic iframe with Jotform auto-resize",
+  "usage": {
+    "pagesUsing": [
+      "https://www.destinationpet.com/about-us/get-in-touch/",
+      "https://www.destinationpet.com/sell-your-business/"
+    ],
+    "reuseCount": 2,
+    "lastUsed": "2026-10-05T00:00:00.000Z"
+  },
+  "options": [],
+  "memberVariantIds": []
+}
