@@ -1,0 +1,12 @@
+{
+  "status": "success",
+  "url": "https://www.destinationpet.com/about-us/destination-pet-foundation/",
+  "path": "about-us/destination-pet-foundation",
+  "timestamp": "2026-10-06T10:43:45.520Z",
+  "title": "Destination Pet Foundation - Destination Pet",
+  "template": "hero-feature-showcase",
+  "blocks": [
+    "hero-banner",
+    "columns-slider"
+  ]
+}

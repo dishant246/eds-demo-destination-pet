@@ -236,7 +236,84 @@
       ],
       "coverageGaps": [],
       "description": "Hero teaser banner followed by a grouped feature row, a standalone content band, and two- and three-column grids",
-      "blocks": []
+      "blocks": [
+        {
+          "name": "hero-banner",
+          "instances": [
+            ".hero.teaser"
+          ]
+        },
+        {
+          "name": "columns-slider",
+          "instances": [
+            ".mediainfo:has(.carousel.panelcontainer)"
+          ]
+        }
+      ],
+      "sections": [
+        {
+          "id": "1",
+          "name": "Hero",
+          "selector": [
+            ".hero.teaser"
+          ],
+          "style": null,
+          "blocks": [
+            "hero-banner"
+          ],
+          "defaultContent": []
+        },
+        {
+          "id": "2",
+          "name": "Mission Statement",
+          "selector": [
+            ".hero.teaser + .columncontainer"
+          ],
+          "style": null,
+          "blocks": [],
+          "defaultContent": [
+            "h1",
+            ".cmp-text p",
+            ".button"
+          ]
+        },
+        {
+          "id": "3",
+          "name": "About Us panel",
+          "selector": [
+            ".image.image__center"
+          ],
+          "style": null,
+          "blocks": [],
+          "defaultContent": [
+            "img"
+          ]
+        },
+        {
+          "id": "4",
+          "name": "Our Impact in Action",
+          "selector": [
+            ".mediainfo:has(.carousel.panelcontainer)"
+          ],
+          "style": null,
+          "blocks": [
+            "columns-slider"
+          ],
+          "defaultContent": []
+        },
+        {
+          "id": "5",
+          "name": "Donate Today CTA",
+          "selector": [
+            ".mediainfo + .columncontainer"
+          ],
+          "style": null,
+          "blocks": [],
+          "defaultContent": [
+            ".button"
+          ]
+        }
+      ]
     },
     {
       "name": "empty-subsection-hub",

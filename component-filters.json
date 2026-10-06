@@ -23,6 +23,7 @@
       "columns",
       "columns-links",
       "columns-media",
+      "columns-slider",
       "embed",
       "embed-form",
       "form",
@@ -116,6 +117,12 @@
   },
   {
     "id": "columns-media",
+    "components": [
+      "column"
+    ]
+  },
+  {
+    "id": "columns-slider",
     "components": [
       "column"
     ]

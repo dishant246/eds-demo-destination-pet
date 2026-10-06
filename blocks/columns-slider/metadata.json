@@ -1,0 +1,16 @@
+{
+  "variantName": "columns-slider",
+  "baseBlock": "columns",
+  "canonicalModel": "standalone",
+  "visualCharacteristics": "two columns: left a photo-only image slider (center mode, one slide in focus with partial neighbours, dot navigation, no arrows); right an H2 + paragraphs with inline links, vertically centred; stacked on mobile with the slider first",
+  "contentPattern": "1 row x 2 cells: [9 images, one per paragraph] | [h2 'Our Impact in Action', p (3 links), p (1 link)]",
+  "usage": {
+    "pagesUsing": [
+      "https://www.destinationpet.com/about-us/destination-pet-foundation/"
+    ],
+    "reuseCount": 1,
+    "lastUsed": "2026-10-06T00:00:00.000Z"
+  },
+  "options": [],
+  "memberVariantIds": []
+}

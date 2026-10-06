@@ -1,0 +1,185 @@
+/*
+ * columns-slider: image slider + text columns (source: .mediainfo with a slick image carousel).
+ * Values extracted from the source computed styles (migration-work/columns-slider-extracted.css).
+ * Source vertical padding is 56px (mobile) / 80px (desktop); the section already adds 40px.
+ */
+
+.columns-slider {
+  padding: 16px 0;
+  color: var(--text-color);
+}
+
+/* mobile: stacked, slider first, 24px apart */
+.columns-slider .columns-slider-row {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.columns-slider .columns-slider-row + .columns-slider-row {
+  margin-top: 24px;
+}
+
+.columns-slider .columns-slider-row > div {
+  min-width: 0;
+}
+
+.columns-slider .columns-slider-img-col {
+  order: -1;
+}
+
+/* slider: one full-width slide at a time, no arrows, dots overlaid at the bottom */
+.columns-slider .columns-slider-slider {
+  position: relative;
+  width: 100%;
+  margin-top: 5px;
+}
+
+.columns-slider .columns-slider-slides,
+.columns-slider .columns-slider-dots {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+/* the track is as tall as the tallest slide, so the dots sit at the same height for every slide */
+.columns-slider .columns-slider-slides {
+  position: relative;
+  display: flex;
+  gap: 0;
+  overflow: auto clip;
+  scroll-snap-type: x mandatory;
+  overscroll-behavior-x: contain;
+  scrollbar-width: none;
+}
+
+.columns-slider .columns-slider-slides::-webkit-scrollbar {
+  display: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .columns-slider .columns-slider-slides {
+    scroll-behavior: smooth;
+  }
+}
+
+.columns-slider .columns-slider-slide {
+  flex: 0 0 100%;
+  scroll-snap-align: center;
+  line-height: 0;
+}
+
+.columns-slider .columns-slider-slide a,
+.columns-slider .columns-slider-slide picture {
+  display: block;
+}
+
+.columns-slider .columns-slider-slide img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+/* dot navigation: 12px dots, 8px apart, 12px above the bottom of the track */
+.columns-slider .columns-slider-nav {
+  position: absolute;
+  inset: auto 0 12px;
+}
+
+.columns-slider .columns-slider-dots {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+}
+
+.columns-slider .columns-slider-dots li {
+  display: flex;
+}
+
+.columns-slider .columns-slider-dot {
+  display: block;
+  width: 12px;
+  min-width: 0;
+  height: 12px;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background-color: var(--brand-beige);
+  background-image: none;
+  box-shadow: none;
+  cursor: pointer;
+}
+
+.columns-slider .columns-slider-dot[aria-current='true'] {
+  background-color: var(--brand-light-blue);
+}
+
+.columns-slider .columns-slider-dot:focus-visible {
+  outline: 2px solid var(--brand-navy);
+  outline-offset: 2px;
+}
+
+/* text column */
+.columns-slider .columns-slider-text-col {
+  margin-bottom: 16px;
+}
+
+.columns-slider .columns-slider-text-col > :first-child {
+  margin-top: 0;
+}
+
+.columns-slider .columns-slider-text-col h2 {
+  margin: 0 0 5px;
+  color: var(--heading-color);
+  font-size: 24px;
+  font-weight: 400;
+  line-height: 1.2;
+}
+
+.columns-slider .columns-slider-text-col p {
+  margin: 0 0 10px;
+  color: var(--text-color);
+  font-size: 16px;
+  line-height: 22.4px;
+  letter-spacing: -0.16px;
+}
+
+.columns-slider .columns-slider-text-col a:any-link {
+  color: var(--text-color);
+  font-weight: 700;
+  text-decoration: underline;
+}
+
+/* desktop: slider (50%) left, text right, 130px apart, vertically centred */
+@media (width >= 900px) {
+  .columns-slider {
+    padding: 40px 0;
+  }
+
+  .columns-slider .columns-slider-row {
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 130px;
+  }
+
+  .columns-slider .columns-slider-img-col {
+    order: 0;
+    flex: 0 0 50%;
+  }
+
+  .columns-slider .columns-slider-text-col {
+    flex: 1 1 0;
+    margin-bottom: 0;
+  }
+
+  .columns-slider .columns-slider-text-col h2 {
+    font-size: 32px;
+  }
+
+  .columns-slider .columns-slider-slides {
+    gap: 24px;
+  }
+}

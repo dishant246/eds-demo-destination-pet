@@ -330,8 +330,25 @@ main > .section:not(.inset) > .default-content-wrapper {
   padding-bottom: 12px;
 }
 
-main > .section > .default-content-wrapper :is(h2, h3, p) {
+main > .section > .default-content-wrapper :is(h1, h2, h3, p) {
   text-align: center;
+}
+
+/* page-level H1 in default content (e.g. "Mission Statement") and its lead line */
+main > .section > .default-content-wrapper h1 {
+  font-size: 32px;
+}
+
+main > .section > .default-content-wrapper h1 + p {
+  font-size: 20px;
+  font-weight: 600;
+  line-height: 28px;
+}
+
+@media (width >= 900px) {
+  main > .section > .default-content-wrapper h1 {
+    font-size: 40px;
+  }
 }
 
 /* legal text: left-aligned copy; the source separates paragraphs with empty spacer paragraphs
@@ -376,6 +393,29 @@ main > .section.legal-text > .default-content-wrapper h2 {
 /* the hero sits flush against the next section */
 main > .section:has(> .hero-banner-wrapper:last-child) {
   padding-bottom: 0;
+}
+
+/* a section holding only a standalone image: no vertical section padding, image centred at its
+   natural size; full-bleed on mobile (source image component) */
+main > .section:has(> .default-content-wrapper:only-child > picture:only-child) {
+  padding-top: 0;
+  padding-bottom: 0;
+}
+
+main > .section > .default-content-wrapper:only-child:has(> picture:only-child) {
+  padding: 0;
+  line-height: 0;
+  text-align: center;
+}
+
+main > .section > .default-content-wrapper:only-child > picture:only-child img {
+  width: 100%;
+}
+
+@media (width >= 900px) {
+  main > .section > .default-content-wrapper:only-child > picture:only-child img {
+    width: auto;
+  }
 }
 
 main > .section > .default-content-wrapper .button-container {
