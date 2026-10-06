@@ -53,6 +53,9 @@ export default function parse(element, { document }) {
   }
 
   const cells = [row];
-  const block = WebImporter.Blocks.createBlock(document, { name: 'columns-media', cells });
+  // source .media-info--right flips the columns on desktop
+  const reversed = element.matches('.media-info--right') || !!element.querySelector(':scope .media-info--right');
+  const name = reversed ? 'columns-media (reverse)' : 'columns-media';
+  const block = WebImporter.Blocks.createBlock(document, { name, cells });
   element.replaceWith(block);
 }

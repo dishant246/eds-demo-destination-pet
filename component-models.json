@@ -161,7 +161,7 @@
     "id": "accordion-faq-item",
     "fields": [
       {
-        "component": "text",
+        "component": "richtext",
         "valueType": "string",
         "name": "summary",
         "value": "",
@@ -180,7 +180,7 @@
     "id": "accordion-split-item",
     "fields": [
       {
-        "component": "text",
+        "component": "richtext",
         "valueType": "string",
         "name": "summary",
         "value": "",
@@ -457,6 +457,19 @@
   {
     "id": "columns-media",
     "fields": [
+      {
+        "component": "multiselect",
+        "name": "classes",
+        "value": "",
+        "label": "Style",
+        "valueType": "string",
+        "options": [
+          {
+            "name": "Image on the other side (reverse)",
+            "value": "reverse"
+          }
+        ]
+      },
       {
         "component": "text",
         "valueType": "number",

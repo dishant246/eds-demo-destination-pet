@@ -26,7 +26,7 @@
               "name": "Accordion Faq Item",
               "model": "accordion-faq-item",
               "summary": "Lorem Ipsum",
-              "text": "<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur volutpat consequat dui, sit amet ...</p>"
+              "text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur volutpat consequat dui, sit amet ..."
             }
           }
         }
@@ -38,7 +38,7 @@
       "id": "accordion-faq-item",
       "fields": [
         {
-          "component": "text",
+          "component": "richtext",
           "valueType": "string",
           "name": "summary",
           "value": "",

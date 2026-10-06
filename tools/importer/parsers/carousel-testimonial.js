@@ -10,7 +10,8 @@
  * Selectors validated against migration-work/block-context/carousel-testimonial/source.html:
  *  - .carousel__item (inside .slick-slide, excluding .slick-cloned)  slide (iteration key)
  *  - .testimonial__description .cmp-text p                           quote + "- Name, Practice" attribution
- *  - dropped: .testimonial__header (duplicated/empty name label), i.testimonial__*-quotes* icons,
+ *  - p.testimonial__header-name  bold name label -> <p><strong>Name</strong></p> first in text cell (skipped when empty)
+ *  - dropped: rest of .testimonial__header (empty address), i.testimonial__*-quotes* icons,
  *             slick arrows/dots
  *  - .carousel__title h2 - empty on source; emitted as default content before the block when present
  * Generated: 2026-10-05
@@ -53,12 +54,23 @@ export default function parse(element, { document }) {
 
   const cells = [];
   items.forEach((item) => {
+    // Bold name label shown above the opening quote mark (often empty on later slides).
+    const nameEl = item.querySelector('.testimonial__header-name');
+    const name = nameEl ? nameEl.textContent.replace(/\s+/g, ' ').trim() : '';
+    let nameP = null;
+    if (name) {
+      nameP = document.createElement('p');
+      const strong = document.createElement('strong');
+      strong.textContent = name;
+      nameP.appendChild(strong);
+    }
     item.querySelectorAll('.testimonial__header, [class*="testimonial__upper-quotes"], [class*="testimonial__lower-quotes"]').forEach((el) => el.remove());
     const desc = item.querySelector('.testimonial__description') || item;
     const textNodes = [...desc.querySelectorAll('p, ul, ol')]
       .filter((el, i, arr) => !arr.some((o) => o !== el && o.contains(el)))
       .filter((el) => el.textContent.trim() !== '')
       .flatMap((el) => (el.tagName === 'P' ? splitAttribution(el, document) : [el]));
+    if (nameP && textNodes.length) textNodes.unshift(nameP);
     const img = item.querySelector('img');
     if (!textNodes.length && !img) return;
     cells.push([

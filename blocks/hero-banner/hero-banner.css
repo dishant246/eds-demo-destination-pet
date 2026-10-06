@@ -1,6 +1,20 @@
-.hero-banner-container .hero-banner-wrapper {
+/* hero-banner: full-bleed photo with warm overlay and centered white H1 (+ optional CTA)
+   Values from source .hero.teaser computed styles (destinationpet.com) */
+
+/* full bleed: break out of the section content max-width */
+main > .section > .hero-banner-wrapper {
   max-width: unset;
   padding: 0;
+}
+
+/* source hero sits flush under the header */
+main > .section.hero-banner-container:has(> .hero-banner-wrapper:first-child) {
+  padding-top: 0;
+}
+
+/* gap to content that follows the hero inside the same section */
+main > .section > .hero-banner-wrapper:not(:last-child) {
+  margin-bottom: 52px;
 }
 
 .hero-banner {
@@ -8,16 +22,24 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  min-height: 360px;
-  overflow: hidden;
   box-sizing: border-box;
-  padding: 48px 24px;
+  width: 100%;
+  height: 640px;
+  padding: 0 16px;
+  overflow: hidden;
 }
 
 .hero-banner .hero-banner-media {
   position: absolute;
   inset: 0;
   z-index: 0;
+}
+
+.hero-banner .hero-banner-media::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(0deg, rgb(90 71 27 / 40%), rgb(90 71 27 / 40%));
 }
 
 .hero-banner .hero-banner-media picture {
@@ -36,34 +58,43 @@
 .hero-banner .hero-banner-content {
   position: relative;
   z-index: 1;
+  box-sizing: border-box;
   width: 100%;
-  max-width: 1200px;
+  max-width: 1280px;
+  padding: 40px 16px 0;
   text-align: center;
 }
 
-.hero-banner .hero-banner-content > :first-child {
-  margin-top: 0;
+.hero-banner .hero-banner-content :is(h1, h2) {
+  margin: 0 0 5px;
+  font-size: 40px;
+  font-weight: 400;
+  line-height: 1.1;
+  color: #fff;
 }
 
-.hero-banner .hero-banner-content > :last-child {
-  margin-bottom: 0;
+.hero-banner .hero-banner-content p {
+  font-size: 18px;
+  line-height: 1.2;
+  letter-spacing: -0.18px;
+  color: #fff;
 }
 
-@media (width >= 600px) {
+.hero-banner .hero-banner-content .button-container {
+  margin: 33px 0 12px;
+}
+
+@media (width >= 768px) {
   .hero-banner {
-    min-height: 480px;
+    height: 643px;
+    padding: 0 24px;
   }
-}
 
-@media (width >= 900px) {
-  .hero-banner {
-    min-height: 640px;
-    padding: 64px 32px;
-  }
-}
-
-@media (width >= 1200px) {
   .hero-banner .hero-banner-content {
-    max-width: 1000px;
+    padding: 40px 24px 0;
+  }
+
+  .hero-banner .hero-banner-content :is(h1, h2) {
+    font-size: var(--heading-size-xxl);
   }
 }

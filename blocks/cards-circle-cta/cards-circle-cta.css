@@ -1,42 +1,40 @@
-/* cards-circle-cta: structural layout only (ring colour left to the design pass) */
+/* cards-circle-cta: 3-up circular photos (ring is part of the artwork) with a CTA beneath */
 .cards-circle-cta > ul {
   list-style: none;
   margin: 0;
-  padding: 0;
-  display: grid;
-  grid-template-columns: minmax(0, 1fr);
-  gap: 2rem;
+  padding: 0 0 12px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 24px;
 }
 
 .cards-circle-cta .cards-circle-cta-card {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
-  gap: 1rem;
+  box-sizing: border-box;
+  flex: 0 0 100%;
   min-width: 0;
+  padding: 0 8px 48px;
+  text-align: center;
 }
 
 .cards-circle-cta .cards-circle-cta-card-image {
-  width: 100%;
-  max-width: 280px;
+  line-height: 0;
 }
 
 .cards-circle-cta .cards-circle-cta-card-image picture {
-  display: block;
-  aspect-ratio: 1 / 1;
-  border: 2px solid var(--cards-circle-cta-ring-color, currentcolor);
-  border-radius: 50%;
-  padding: 4px;
-  box-sizing: border-box;
+  display: flex;
+  justify-content: center;
 }
 
 .cards-circle-cta .cards-circle-cta-card-image img {
   display: block;
-  width: 100%;
-  height: 100%;
-  border-radius: 50%;
-  object-fit: cover;
+  width: auto;
+  max-width: 100%;
+  height: auto;
+}
+
+.cards-circle-cta .cards-circle-cta-card-body {
+  padding-top: 24px;
 }
 
 .cards-circle-cta .cards-circle-cta-card-body > * {
@@ -44,13 +42,14 @@
 }
 
 @media (width >= 600px) {
-  .cards-circle-cta > ul {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+  .cards-circle-cta .cards-circle-cta-card {
+    flex-basis: calc((100% - 24px) / 2);
+    padding: 0 0 64px;
   }
 }
 
 @media (width >= 900px) {
-  .cards-circle-cta > ul {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
+  .cards-circle-cta .cards-circle-cta-card {
+    flex-basis: calc((100% - 48px) / 3);
   }
 }

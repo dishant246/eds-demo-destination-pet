@@ -1,4 +1,19 @@
-/* video-overlay: structural layout only (no brand colour/typography) */
+/* video-overlay: 16:9 poster with 20% dark overlay and centered round green play button
+   Values from source .video .video__overlay computed styles (destinationpet.com/join-our-pack/life-at-dp) */
+
+/* source gutters / spacing around the video */
+main > .section > .video-overlay-wrapper {
+  padding: 0 16px;
+}
+
+main > .section > .video-overlay-wrapper:not(:first-child) {
+  margin-top: 93px;
+}
+
+main > .section > .video-overlay-wrapper:last-child {
+  margin-bottom: 8px;
+}
+
 .video-overlay {
   width: 100%;
 }
@@ -17,18 +32,31 @@
   object-fit: cover;
 }
 
+/* reset global <button> styling on the poster */
 .video-overlay .video-overlay-poster {
   position: absolute;
   inset: 0;
   display: block;
   width: 100%;
+  min-width: 0;
+  max-width: none;
   height: 100%;
   margin: 0;
   padding: 0;
   border: 0;
   border-radius: 0;
   background: none;
+  box-shadow: none;
   cursor: pointer;
+}
+
+.video-overlay .video-overlay-poster:hover,
+.video-overlay .video-overlay-poster:focus {
+  background: none;
+}
+
+.video-overlay .video-overlay-poster:focus-visible {
+  outline: none;
 }
 
 .video-overlay .video-overlay-poster picture,
@@ -42,38 +70,63 @@
   object-fit: cover;
 }
 
+/* overlay tint */
+.video-overlay .video-overlay-poster::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background-color: rgb(0 0 0 / 20%);
+}
+
 /* centered circular play button */
 .video-overlay .video-overlay-play {
   position: absolute;
   top: 50%;
   left: 50%;
-  width: 48px;
-  height: 48px;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 57px;
+  height: 57px;
   border-radius: 50%;
-  background-color: rgb(0 0 0 / 60%);
+  background-color: rgb(56 91 78);
   transform: translate(-50%, -50%);
-  transition: transform 0.2s;
 }
 
+/* play glyph: rounded white triangle */
 .video-overlay .video-overlay-play::after {
   content: '';
-  position: absolute;
-  top: 50%;
-  left: 54%;
-  border-style: solid;
-  border-width: 9px 0 9px 15px;
-  border-color: transparent transparent transparent #fff;
-  transform: translate(-50%, -50%);
+  display: block;
+  width: 14px;
+  height: 18px;
+  margin-left: 0.5px;
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 14 18'%3E%3Cpath d='M1.5 1.8v14.4L12 9z' fill='%23fff' stroke='%23fff' stroke-width='2' stroke-linejoin='round'/%3E%3C/svg%3E") center / contain no-repeat;
 }
 
-.video-overlay .video-overlay-poster:hover .video-overlay-play,
+.video-overlay .video-overlay-poster:hover .video-overlay-play {
+  background: linear-gradient(0deg, rgb(0 0 0 / 20%), rgb(0 0 0 / 20%)), rgb(56 91 78);
+  box-shadow: var(--button-shadow);
+}
+
 .video-overlay .video-overlay-poster:focus-visible .video-overlay-play {
-  transform: translate(-50%, -50%) scale(1.1);
+  outline: 2px solid var(--brand-navy);
+  outline-offset: 2px;
+}
+
+@media (width >= 768px) {
+  main > .section > .video-overlay-wrapper:not(:first-child) {
+    margin-top: 109px;
+  }
+
+  main > .section > .video-overlay-wrapper:last-child {
+    margin-bottom: 24px;
+  }
 }
 
 @media (width >= 900px) {
-  .video-overlay .video-overlay-play {
-    width: 64px;
-    height: 64px;
+  main > .section > .video-overlay-wrapper {
+    padding: 0 32px;
   }
 }

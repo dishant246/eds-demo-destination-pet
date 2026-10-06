@@ -37,8 +37,14 @@ export default function parse(element, { document }) {
     const summary = titleEl ? titleEl.textContent.replace(/\s+/g, ' ').trim() : '';
     const body = panelContent(item.querySelector('.cmp-accordion__panel'));
     if (!summary && !body.length) return;
+    // Source question is an <h3 class="cmp-accordion__header">; keep it as h3 in the title cell.
+    let summaryNode = null;
+    if (summary) {
+      summaryNode = document.createElement('h3');
+      summaryNode.textContent = summary;
+    }
     cells.push([
-      summary ? hint(document, 'summary', [summary]) : '',
+      summaryNode ? hint(document, 'summary', [summaryNode]) : '',
       body.length ? hint(document, 'text', body) : '',
     ]);
   });

@@ -5,7 +5,7 @@
  * Instances: .columncontainer:has(... > .container__column.col-md-6 > .accordion) - one instance holds two
  *   .col-md-6 columns, each with a group title (h2) and an AEM Core accordion.
  * UE model (blocks/accordion-split/_accordion-split.json):
- *   accordion-split-group: title (richtext)          -> single-cell group row  [title]
+ *   accordion-split-group: title (richtext)          -> group row  [accordion-split-group | title]
  *   accordion-split-item:  summary (text), text (richtext) -> item row        [summary] | [text]
  * Row order: group row, then that group's item rows, repeated per column (blocks/accordion-split/accordion-split.js
  * treats a single-cell row as the start of a new group).
@@ -42,7 +42,9 @@ export default function parse(element, { document }) {
     if (titleEl) {
       const h = document.createElement(/^H[1-6]$/.test(titleEl.tagName) ? titleEl.tagName.toLowerCase() : 'h2');
       h.textContent = titleEl.textContent.trim();
-      cells.push([hint(document, 'title', [h])]);
+      // first cell names the item component so xwalk (md2jcr) maps this row to the
+      // accordion-split-group model instead of padding an accordion-split-item with template defaults
+      cells.push(['accordion-split-group', hint(document, 'title', [h])]);
     }
 
     group.querySelectorAll('.cmp-accordion__item').forEach((item) => {
@@ -50,8 +52,14 @@ export default function parse(element, { document }) {
       const summary = t ? t.textContent.replace(/\s+/g, ' ').trim() : '';
       const body = panelContent(item.querySelector('.cmp-accordion__panel'));
       if (!summary && !body.length) return;
+      // Source item title is an <h3 class="cmp-accordion__header">; keep it as h3 in the title cell.
+      let summaryNode = null;
+      if (summary) {
+        summaryNode = document.createElement('h3');
+        summaryNode.textContent = summary;
+      }
       cells.push([
-        summary ? hint(document, 'summary', [summary]) : '',
+        summaryNode ? hint(document, 'summary', [summaryNode]) : '',
         body.length ? hint(document, 'text', body) : '',
       ]);
     });

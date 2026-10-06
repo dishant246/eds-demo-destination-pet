@@ -1,0 +1,38 @@
+/* Destination Pet brand tokens — extracted from https://www.destinationpet.com */
+:root {
+  /* fonts */
+  --heading-font-family: worksans, worksans-fallback, arial, sans-serif;
+  --body-font-family: worksans, worksans-fallback, arial, sans-serif;
+  --accent-font-family: montserrat, montserrat-fallback, arial, sans-serif;
+
+  /* colors */
+  --background-color: #fff;
+  --text-color: #363636;
+  --heading-color: #213778;
+  --link-color: #e87722;
+  --link-hover-color: #0056b3;
+  --brand-navy: #213778;
+  --brand-orange: #e87722;
+  --brand-beige: #f2f0eb;
+  --brand-light-blue: #a5c8e0;
+
+  /* buttons */
+  --button-bg: var(--brand-orange);
+  --button-color: #fff;
+  --button-radius: 4px;
+  --button-shadow: 0 0 24px 0 rgb(0 0 0 / 8%);
+  --button-hover-overlay: linear-gradient(0deg, rgb(0 0 0 / 20%), rgb(0 0 0 / 20%));
+
+  /* spacing */
+  --section-padding: 40px;
+  --content-max-width: 1280px;
+  --nav-height: 88px;
+
+  /* heading sizes (desktop) */
+  --heading-size-xxl: 48px;
+  --heading-size-xl: 32px;
+  --heading-size-l: 24px;
+  --heading-size-m: 20px;
+  --heading-size-s: 18px;
+  --heading-size-xs: 16px;
+}

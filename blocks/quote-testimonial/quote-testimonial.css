@@ -1,59 +1,98 @@
-.quote-testimonial .quote-testimonial-figure {
-  position: relative;
-  margin: 0 auto;
-  padding: 48px 16px;
-  max-width: 1200px;
-  text-align: center;
+/*
+ * quote-testimonial
+ * Values extracted from destinationpet.com .testimonialscard (computed styles).
+ * The source renders the quote marks with the icomoon "comma" glyph (U+E905);
+ * the same glyph path is reused here as a CSS mask so the colour stays tokenised.
+ * Background comes from the section (tertiary/white), matching the source card.
+ */
+.quote-testimonial {
+  --quote-testimonial-mark-color: #5a471b;
+  --quote-testimonial-mark-size: 24px;
+  --quote-testimonial-mark: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1024 1024'%3E%3Cpath transform='matrix(1 0 0 -1 0 960)' d='M219.429 59.472c-44.861 0-83.871 11.703-117.029 35.109-33.158 25.358-58.514 59.491-76.069 102.401s-26.331 91.673-26.331 146.286c0 66.316 10.728 129.707 32.183 190.171 23.406 62.416 58.514 119.954 105.326 172.617s107.276 96.549 181.394 131.658l122.88-114.103c-52.663-17.554-99.474-41.935-140.434-73.143-39.009-31.207-71.192-66.316-96.549-105.326-23.406-39.009-39.985-78.994-49.737-119.954l11.703-5.851c7.802 5.851 17.554 10.728 29.257 14.629s29.257 5.851 52.663 5.851c23.406 0 47.786-6.826 73.143-20.48s45.836-34.133 61.44-61.44c17.554-25.356 26.331-59.489 26.331-102.4 0-35.109-8.777-67.291-26.331-96.549-15.604-29.257-38.034-53.637-67.291-73.144-29.257-17.554-61.44-26.331-96.549-26.331zM769.463 59.472c-44.861 0-83.871 11.703-117.029 35.109-33.158 25.358-58.514 59.491-76.069 102.401s-26.331 91.673-26.331 146.286c0 66.316 10.728 129.707 32.183 190.171 23.406 62.416 58.514 119.954 105.326 172.617s107.279 96.549 181.394 131.658l122.88-114.103c-52.663-17.554-99.474-41.935-140.434-73.143-39.007-31.207-71.19-66.316-96.549-105.326-23.406-39.009-39.985-78.994-49.737-119.954l11.703-5.851c7.802 5.851 17.554 10.728 29.257 14.629s29.257 5.851 52.663 5.851c23.406 0 47.784-6.826 73.143-20.48s45.839-34.133 61.44-61.44c17.554-25.356 26.331-59.489 26.331-102.4 0-35.109-8.777-67.291-26.331-96.549-15.601-29.257-38.034-53.637-67.291-73.144-29.257-17.554-61.44-26.331-96.549-26.331z'/%3E%3C/svg%3E");
+
+  color: var(--text-color);
 }
 
+.quote-testimonial .quote-testimonial-figure {
+  margin: 0;
+  padding: 24px;
+  text-align: left;
+}
+
+/* opening + closing quote marks (source: i.testimonial__upper/lower-quotes) */
 .quote-testimonial .quote-testimonial-figure::before,
 .quote-testimonial .quote-testimonial-figure::after {
-  position: absolute;
-  left: 0;
-  font-size: 3em;
-  line-height: 1;
+  content: '';
+  display: block;
+  width: var(--quote-testimonial-mark-size);
+  height: var(--quote-testimonial-mark-size);
+  background-color: var(--quote-testimonial-mark-color);
+  mask-image: var(--quote-testimonial-mark);
+  mask-position: center;
+  mask-repeat: no-repeat;
+  mask-size: 100% 100%;
 }
 
+/* header margin (16px) above the upper mark; its 26px line box + 16px description margin below */
 .quote-testimonial .quote-testimonial-figure::before {
-  content: '“';
-  top: 0;
+  margin: 16px 0 18px;
 }
 
+/*
+ * lower mark is the same glyph rotated 180deg; 16px description margin above.
+ * Below: 3px line-box remainder + the 12px bottom padding of the source .container__column.
+ */
 .quote-testimonial .quote-testimonial-figure::after {
-  content: '”';
-  bottom: 0;
+  margin: 16px 0 15px;
+  transform: rotate(180deg);
 }
 
-.quote-testimonial .quote-testimonial-quotation {
+/*
+ * On the source the section heading sits in the same .container__column as the card,
+ * so the 12px default-content column padding is not repeated between heading and quote.
+ */
+.default-content-wrapper + .quote-testimonial-wrapper > .quote-testimonial {
+  margin-top: -12px;
+}
+
+/*
+ * inset variant: card nested in a second column container (e.g. life-at-dp) -
+ * heading in its own column, card inset 16px (mobile) / 24px (desktop) each side,
+ * 2 x 12px column padding below.
+ */
+.quote-testimonial-wrapper > .quote-testimonial.inset {
+  margin: 0 16px 12px;
+}
+
+@media (width >= 900px) {
+  .quote-testimonial-wrapper > .quote-testimonial.inset {
+    margin-inline: 24px;
+  }
+}
+
+.quote-testimonial .quote-testimonial-quotation,
+.quote-testimonial .quote-testimonial-attribution {
   margin: 0;
 }
 
-.quote-testimonial .quote-testimonial-quotation > :first-child,
-.quote-testimonial .quote-testimonial-attribution > :first-child {
-  margin-top: 0;
+.quote-testimonial .quote-testimonial-quotation p,
+.quote-testimonial .quote-testimonial-attribution p {
+  margin: 0 0 10px;
+  font-size: var(--body-font-size-m);
+  font-weight: 400;
+  line-height: 22.4px;
+  letter-spacing: -0.16px;
+  text-align: center;
 }
 
-.quote-testimonial .quote-testimonial-quotation > :last-child,
 .quote-testimonial .quote-testimonial-attribution > :last-child {
   margin-bottom: 0;
 }
 
-.quote-testimonial .quote-testimonial-attribution {
-  margin-top: 16px;
+.quote-testimonial .quote-testimonial-attribution :is(strong, b) {
+  font-weight: 700;
 }
 
 .quote-testimonial .quote-testimonial-attribution cite {
   font-style: normal;
-}
-
-@media (width >= 600px) {
-  .quote-testimonial .quote-testimonial-figure {
-    padding: 48px 24px;
-  }
-}
-
-@media (width >= 900px) {
-  .quote-testimonial .quote-testimonial-figure {
-    padding: 56px 32px;
-  }
 }

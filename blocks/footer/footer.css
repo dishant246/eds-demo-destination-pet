@@ -1,20 +1,209 @@
+/* footer: navy band with logo, link columns and a copyright / social row.
+   Values measured on destinationpet.com (375 and 1440 viewports). */
 footer {
-  background-color: var(--light-color);
-  font-size: var(--body-font-size-xs);
+  background-color: var(--brand-navy);
+  color: #fff;
 }
 
-footer .footer > div {
-  margin: auto;
-  max-width: 1200px;
-  padding: 40px 24px 24px;
+/* mobile: 56px / 16px padding, accordion columns */
+footer .footer-inner {
+  box-sizing: border-box;
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 56px 16px;
 }
 
-footer .footer p {
+footer .footer p,
+footer .footer ul {
   margin: 0;
+  padding: 0;
+  list-style: none;
 }
 
-@media (width >= 900px) {
-  footer .footer > div {
-    padding: 40px 32px 24px;
+footer .footer-brand {
+  line-height: 0;
+}
+
+footer .footer-brand img {
+  width: 128px;
+  height: 94px;
+}
+
+/* columns */
+footer .footer-columns {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  margin-top: 56px;
+}
+
+footer .footer-column {
+  color: #fff;
+  font-family: var(--accent-font-family);
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 20px;
+  letter-spacing: -0.16px;
+}
+
+footer .footer p.footer-column-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  min-height: 30px;
+  font-size: 30px;
+  line-height: 24px;
+  letter-spacing: normal;
+  cursor: pointer;
+}
+
+footer .footer-column[aria-expanded='true'] p.footer-column-heading {
+  margin-bottom: 20px;
+}
+
+footer .footer-column-heading strong {
+  font-weight: 600;
+}
+
+footer .footer-column:not([aria-expanded='true']) > :not(.footer-column-heading) {
+  display: none;
+}
+
+/* accordion chevron: down when closed, up when open */
+footer .footer-chevron {
+  flex: 0 0 auto;
+  width: 30px;
+  height: 30px;
+}
+
+footer .footer-chevron::before {
+  display: block;
+  content: '';
+  width: 18px;
+  height: 18px;
+  margin: 0 auto;
+  border-right: 3px solid currentcolor;
+  border-bottom: 3px solid currentcolor;
+  transform: rotate(45deg);
+}
+
+footer .footer-column[aria-expanded='true'] .footer-chevron::before {
+  margin-top: 12px;
+  transform: rotate(-135deg);
+}
+
+footer .footer-column li {
+  margin-bottom: 20px;
+  padding-top: 4px;
+}
+
+footer .footer-column li:last-child {
+  margin-bottom: 0;
+}
+
+footer .footer-column p + p:has(a) {
+  margin-top: 5px;
+}
+
+footer .footer a:any-link {
+  color: #fff;
+  text-decoration: none;
+}
+
+footer .footer a:hover {
+  color: #fff;
+  text-decoration: none;
+}
+
+/* only the email link underlines on hover (as on the source) */
+footer .footer a[href^='mailto:']:hover {
+  text-decoration: underline;
+}
+
+/* bottom row: copyright above left-aligned social icons */
+footer .footer-bottom {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 24px;
+  margin-top: 56px;
+}
+
+footer .footer .footer-copyright {
+  font-family: var(--body-font-family);
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 16.8px;
+  letter-spacing: 0.24px;
+}
+
+footer .footer .footer-social {
+  display: flex;
+  gap: 24px;
+}
+
+/* the source icon boxes are 29px tall on mobile (icon at the top) */
+footer .footer .footer-social a {
+  display: block;
+  height: 29px;
+  line-height: 0;
+}
+
+footer .footer-social-icon {
+  display: block;
+  width: 24px;
+  height: 24px;
+  background-color: #fff;
+  mask: var(--icon) center / contain no-repeat;
+}
+
+/* breakpoint-exception: the source switches from the accordion to columns at 768px */
+@media (width >= 768px) {
+  footer .footer-inner {
+    padding: 80px 20px;
+  }
+
+  footer .footer-columns {
+    flex-direction: row;
+    gap: 0;
+    min-height: 163px;
+    margin-top: 64px;
+  }
+
+  footer .footer-column {
+    flex: 0 0 18.75%;
+  }
+
+  footer .footer p.footer-column-heading,
+  footer .footer-column[aria-expanded='true'] p.footer-column-heading {
+    display: block;
+    min-height: 0;
+    margin-bottom: 20px;
+    cursor: auto;
+  }
+
+  footer .footer-column:not([aria-expanded='true']) > :not(.footer-column-heading) {
+    display: block;
+  }
+
+  footer .footer-column:not([aria-expanded='true']) > ul:not(.footer-column-heading) {
+    display: block;
+  }
+
+  footer .footer-chevron {
+    display: none;
+  }
+
+  footer .footer .footer-social a {
+    height: auto;
+  }
+
+  footer .footer-bottom {
+    flex-flow: row wrap;
+    align-items: center;
+    justify-content: space-between;
+    min-height: 29px;
+    margin-top: 165px;
   }
 }

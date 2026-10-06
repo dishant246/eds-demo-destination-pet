@@ -9,6 +9,9 @@ import { moveInstrumentation } from '../../scripts/scripts.js';
 
 let instanceId = 0;
 
+/* source slick carousel auto-advances roughly every 4s and loops */
+const AUTOPLAY_INTERVAL = 4000;
+
 function setActive(block, index) {
   const slides = [...block.querySelectorAll('.carousel-steps-slide')];
   const dots = [...block.querySelectorAll('.carousel-steps-dot')];
@@ -30,6 +33,64 @@ function showSlide(block, index) {
   const target = (index + slides.length) % slides.length;
   block.querySelector('.carousel-steps-slides').scrollTo({ left: slides[target].offsetLeft, behavior: 'smooth' });
   setActive(block, target);
+}
+
+/**
+ * Auto-advance (looping) every AUTOPLAY_INTERVAL ms.
+ * Pauses while hovered with a mouse or while keyboard focus is inside the block,
+ * and while the page is hidden; never runs when the user prefers reduced motion.
+ * @param {Element} block
+ * @returns {Function} restart - resets the timer (e.g. after manual navigation)
+ */
+function initAutoplay(block) {
+  const track = block.querySelector('.carousel-steps-slides');
+  const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+  let timer;
+  let hovered = false;
+  let focused = false;
+
+  const stop = () => {
+    clearInterval(timer);
+    timer = undefined;
+    track.setAttribute('aria-live', 'polite');
+  };
+
+  const start = () => {
+    stop();
+    if (reducedMotion.matches || hovered || focused || document.hidden) return;
+    track.setAttribute('aria-live', 'off');
+    timer = setInterval(() => {
+      showSlide(block, Number(block.dataset.activeSlide || 0) + 1);
+    }, AUTOPLAY_INTERVAL);
+  };
+
+  block.addEventListener('pointerenter', (e) => {
+    if (e.pointerType !== 'mouse') return;
+    hovered = true;
+    stop();
+  });
+  block.addEventListener('pointerleave', (e) => {
+    if (e.pointerType !== 'mouse') return;
+    hovered = false;
+    start();
+  });
+  block.addEventListener('focusin', (e) => {
+    // mouse clicks on the dots are covered by hover; pause for keyboard focus
+    if (!e.target.matches(':focus-visible')) return;
+    focused = true;
+    stop();
+  });
+  block.addEventListener('focusout', (e) => {
+    if (block.contains(e.relatedTarget)) return;
+    focused = false;
+    start();
+  });
+  track.addEventListener('touchstart', start, { passive: true });
+  document.addEventListener('visibilitychange', start);
+  reducedMotion.addEventListener('change', start);
+
+  start();
+  return start;
 }
 
 export default function decorate(block) {
@@ -76,6 +137,7 @@ export default function decorate(block) {
 
   const slides = [...track.children];
   if (slides.length > 1) {
+    let restartAutoplay = () => {};
     const nav = document.createElement('nav');
     nav.className = 'carousel-steps-nav';
     nav.setAttribute('aria-label', 'Carousel Slide Controls');
@@ -88,19 +150,28 @@ export default function decorate(block) {
       btn.className = 'carousel-steps-dot';
       btn.setAttribute('aria-label', `Show Slide ${i + 1} of ${slides.length}`);
       btn.setAttribute('aria-controls', slide.id);
-      btn.addEventListener('click', () => showSlide(block, i));
+      btn.addEventListener('click', () => {
+        showSlide(block, i);
+        restartAutoplay();
+      });
       li.append(btn);
       dots.append(li);
     });
     nav.append(dots);
     block.append(nav);
 
+    // derive the active slide from the actual scroll position: intersection entries can be
+    // stale after layout changes (resize/rotation), which would desync dots and autoplay
+    const syncActive = () => {
+      const index = Math.round(track.scrollLeft / (track.clientWidth || 1));
+      setActive(block, Math.max(0, Math.min(index, slides.length - 1)));
+    };
     const observer = new IntersectionObserver((entries) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) setActive(block, slides.indexOf(entry.target));
-      });
+      if (entries.some((entry) => entry.isIntersecting)) syncActive();
     }, { root: track, threshold: 0.6 });
     slides.forEach((s) => observer.observe(s));
+
+    restartAutoplay = initAutoplay(block);
   }
   if (slides.length) setActive(block, 0);
 }

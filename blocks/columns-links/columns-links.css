@@ -1,12 +1,13 @@
-/* columns-links: structural layout only (no brand colour/typography) */
+/* columns-links: equal-width columns of centred buttons or compact link lists
+   (source: .columncontainer > .row.container__layout-section, 12px column gutters) */
 .columns-links .columns-links-row {
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
+  gap: 24px;
 }
 
 .columns-links .columns-links-row + .columns-links-row {
-  margin-top: 1.5rem;
+  margin-top: 24px;
 }
 
 .columns-links .columns-links-col {
@@ -23,25 +24,45 @@
   margin-bottom: 0;
 }
 
-/* single link -> centered button */
+/* single link -> centred button (global a.button styles: orange, 4px radius, shadow) */
 .columns-links .columns-links-single .button-container {
   margin: 0;
 }
 
-/* several links -> compact link list */
-.columns-links .columns-links-list p,
-.columns-links .columns-links-list li {
-  margin: 0 0 0.25rem;
+/* map links carry a location pin before the label (source .icon-location, 16px glyph) */
+.columns-links a.button[href*="google.com/maps"]::before {
+  content: '';
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  margin-right: 5px;
+  vertical-align: -2px;
+  background-color: currentcolor;
+  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath fill-rule='evenodd' d='M8 1C5.2 1 3 3.2 3 6c0 3.8 5 9 5 9s5-5.2 5-9c0-2.8-2.2-5-5-5zm0 7a2 2 0 1 1 0-4 2 2 0 0 1 0 4z'/%3E%3C/svg%3E") center / contain no-repeat;
 }
 
+/* several links -> compact stacked list of small bold links (source .link__text) */
 .columns-links .columns-links-items {
   list-style: none;
   margin: 0;
   padding: 0;
 }
 
+.columns-links .columns-links-list p,
+.columns-links .columns-links-list li {
+  margin: 0;
+  line-height: 18px;
+}
+
+.columns-links .columns-links-list a:any-link {
+  font-size: var(--body-font-size-m);
+  font-weight: 700;
+  line-height: 18px;
+  color: var(--link-color);
+}
+
 .columns-links .columns-links-list .button-container {
-  margin: 0 0 0.5rem;
+  margin: 0;
 }
 
 @media (width >= 600px) {
@@ -57,5 +78,21 @@
     display: flex;
     flex-direction: row;
     align-items: flex-start;
+    padding: 12px 0;
+  }
+
+  /* link index: nested 24px-inset container on the source (1232px wide) with a 24px top
+     spacer; the preceding default-content button already contributes 12px of it */
+  .columns-links:has(.columns-links-list) {
+    padding: 12px 24px 0;
+  }
+
+  /* two buttons hug the centre line (source button__right | button__left) */
+  .columns-links.columns-links-2-cols .columns-links-single:first-child {
+    text-align: right;
+  }
+
+  .columns-links.columns-links-2-cols .columns-links-single:last-child {
+    text-align: left;
   }
 }

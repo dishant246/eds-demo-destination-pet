@@ -1,6 +1,33 @@
-/* carousel-steps: structural layout only (no brand colour/typography) */
+/*
+ * carousel-steps: one-up step slider (values from source computed styles).
+ * The block root has no padding (as on the source .carousel.panelcontainer).
+ */
 .carousel-steps {
   position: relative;
+  padding: 0;
+  color: var(--text-color);
+}
+
+/*
+ * On the source the section heading, the carousel and the CTA button share one
+ * .container__column, so the 12px default-content column padding (and the CTA's
+ * 12px button-container margin) are not repeated around the carousel.
+ */
+.default-content-wrapper + .carousel-steps-wrapper > .carousel-steps {
+  margin-top: -12px;
+}
+
+.carousel-steps-wrapper:has(+ .default-content-wrapper) > .carousel-steps {
+  margin-bottom: -12px;
+}
+
+.carousel-steps-wrapper:has(+ .default-content-wrapper > .button-container:first-child) > .carousel-steps {
+  margin-bottom: -24px;
+}
+
+/* source: empty carousel title h2 (margin-bottom 5px) above the slick track */
+.carousel-steps .carousel-steps-container {
+  padding-top: 5px;
 }
 
 .carousel-steps .carousel-steps-slides,
@@ -22,17 +49,32 @@
   display: none;
 }
 
-/* one slide visible: icon stacked above the step title, centered */
+/*
+ * one slide visible: icon stacked above the step title, centered.
+ * Source slides stretch to the tallest slick slide (367px mobile / 405px desktop),
+ * with 24px bottom padding under the card.
+ */
 .carousel-steps .carousel-steps-slide {
   flex: 0 0 100%;
   width: 100%;
+  min-height: 367px;
+  padding: 0 0 24px;
   scroll-snap-align: start;
   display: flex;
   flex-direction: column;
   align-items: center;
   text-align: center;
-  gap: 1rem;
   box-sizing: border-box;
+}
+
+.carousel-steps .carousel-steps-icon {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
+.carousel-steps .carousel-steps-icon p {
+  margin: 0;
 }
 
 .carousel-steps .carousel-steps-icon picture,
@@ -40,50 +82,89 @@
   display: block;
 }
 
+/* icons render at their intrinsic size on the source */
 .carousel-steps .carousel-steps-icon img {
   width: auto;
-  max-width: 160px;
+  max-width: 100%;
   height: auto;
-  margin: 0 auto;
+}
+
+.carousel-steps .carousel-steps-content {
+  width: 100%;
+  padding: 24px 0;
 }
 
 .carousel-steps .carousel-steps-content > :first-child {
   margin-top: 0;
 }
 
-.carousel-steps .carousel-steps-content > :last-child {
-  margin-bottom: 0;
+.carousel-steps .carousel-steps-content h3 {
+  margin: 0 0 5px;
+  font-size: var(--heading-font-size-s);
+  font-weight: 400;
+  line-height: 1.1;
+  text-align: center;
+  color: var(--brand-orange);
 }
 
+/* dot navigation: source slick dots sit absolute, 12px from the bottom */
 .carousel-steps .carousel-steps-nav {
-  margin-top: 1.5rem;
+  position: absolute;
+  right: 0;
+  bottom: 12px;
+  left: 0;
 }
 
 .carousel-steps .carousel-steps-dots {
   display: flex;
   justify-content: center;
-  gap: 0.5rem;
+}
+
+.carousel-steps .carousel-steps-dots li {
+  width: 12px;
+  height: 12px;
+  margin: 0 8px 0 0;
+}
+
+/* source: only the gap between dots, none after the last one */
+.carousel-steps .carousel-steps-dots li:last-child {
+  margin-right: 0;
 }
 
 .carousel-steps .carousel-steps-dot {
   display: block;
-  width: 10px;
-  height: 10px;
+  width: 12px;
+  min-width: 0;
+  height: 12px;
   margin: 0;
   padding: 0;
   border: 0;
   border-radius: 50%;
-  background-color: currentcolor;
-  opacity: 0.3;
+  background-color: var(--brand-beige);
+  background-image: none;
+  box-shadow: none;
   cursor: pointer;
 }
 
+.carousel-steps .carousel-steps-dot:hover,
+.carousel-steps .carousel-steps-dot:focus {
+  background-image: none;
+}
+
 .carousel-steps .carousel-steps-dot[aria-current='true'] {
-  opacity: 1;
+  background-color: var(--brand-light-blue);
 }
 
 @media (width >= 900px) {
-  .carousel-steps .carousel-steps-icon img {
-    max-width: 200px;
+  .carousel-steps .carousel-steps-slide {
+    min-height: 405px;
+  }
+
+  .carousel-steps .carousel-steps-content {
+    padding: 24px 0 40px;
+  }
+
+  .carousel-steps .carousel-steps-content h3 {
+    font-size: var(--heading-font-size-l);
   }
 }

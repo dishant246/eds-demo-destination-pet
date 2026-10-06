@@ -1,10 +1,17 @@
-/* embed-form: structural layout only (no brand colour/typography) */
+/*
+ * embed-form
+ * Source (destinationpet.com .rawhtml > iframe): the Jotform iframe is full-bleed
+ * (100% of the viewport, no padding, no border, display block) on desktop and mobile.
+ * The lavender page background and white rounded card are rendered *inside* the
+ * Jotform iframe, so no card/background treatment is applied here.
+ */
 .embed-form {
   width: 100%;
-  max-width: 680px;
-  margin: 0 auto;
+  max-width: none;
+  margin: 0;
 }
 
+/* inner wrapper created by embed-form.js (same class name as the EDS outer wrapper) */
 .embed-form .embed-form-wrapper {
   width: 100%;
   min-height: 600px;
@@ -15,12 +22,31 @@
   width: 100%;
   min-width: 100%;
   height: 1400px;
-  border: 0;
+  border: none;
+  overflow: hidden;
 }
 
-/* Jotform posts its real height; start shorter and let it resize */
+/* Jotform posts its real height (setHeight); start shorter and let it resize */
 .embed-form.embed-form-jotform .embed-form-frame {
   height: 1100px;
+}
+
+/* full-bleed: undo the section content max-width / gutter (outer EDS wrapper only) */
+main > .section > .embed-form-wrapper {
+  max-width: none;
+  padding: 0;
+}
+
+/* source: the form follows the hero directly; cancel hero-banner's 52px bottom
+   margin (adjacent sibling margins collapse: 52px + -52px = 0) */
+main > .section > .hero-banner-wrapper + .embed-form-wrapper {
+  margin-top: -52px;
+}
+
+/* source: when the form ends the page content it runs flush into the footer;
+   cancel the section's bottom padding so no white band shows under the iframe */
+main > .section > .embed-form-wrapper:last-child {
+  margin-bottom: calc(-1 * var(--section-padding));
 }
 
 @media (width >= 600px) {

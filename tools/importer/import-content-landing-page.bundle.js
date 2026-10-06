@@ -121,7 +121,9 @@ var CustomImportScript = (() => {
       return;
     }
     const cells = [row];
-    const block = WebImporter.Blocks.createBlock(document, { name: "columns-media", cells });
+    const reversed = element.matches(".media-info--right") || !!element.querySelector(":scope .media-info--right");
+    const name = reversed ? "columns-media (reverse)" : "columns-media";
+    const block = WebImporter.Blocks.createBlock(document, { name, cells });
     element.replaceWith(block);
   }
 
@@ -385,9 +387,19 @@ var CustomImportScript = (() => {
     if (!items.length) items = [...element.querySelectorAll(".testimonialscard")].filter((it) => !it.closest(".slick-cloned"));
     const cells = [];
     items.forEach((item) => {
+      const nameEl = item.querySelector(".testimonial__header-name");
+      const name = nameEl ? nameEl.textContent.replace(/\s+/g, " ").trim() : "";
+      let nameP = null;
+      if (name) {
+        nameP = document.createElement("p");
+        const strong = document.createElement("strong");
+        strong.textContent = name;
+        nameP.appendChild(strong);
+      }
       item.querySelectorAll('.testimonial__header, [class*="testimonial__upper-quotes"], [class*="testimonial__lower-quotes"]').forEach((el) => el.remove());
       const desc = item.querySelector(".testimonial__description") || item;
       const textNodes = [...desc.querySelectorAll("p, ul, ol")].filter((el, i, arr) => !arr.some((o) => o !== el && o.contains(el))).filter((el) => el.textContent.trim() !== "").flatMap((el) => el.tagName === "P" ? splitAttribution(el, document) : [el]);
+      if (nameP && textNodes.length) textNodes.unshift(nameP);
       const img = item.querySelector("img");
       if (!textNodes.length && !img) return;
       cells.push([
@@ -482,8 +494,13 @@ var CustomImportScript = (() => {
       const summary = titleEl ? titleEl.textContent.replace(/\s+/g, " ").trim() : "";
       const body = panelContent(item.querySelector(".cmp-accordion__panel"));
       if (!summary && !body.length) return;
+      let summaryNode = null;
+      if (summary) {
+        summaryNode = document.createElement("h3");
+        summaryNode.textContent = summary;
+      }
       cells.push([
-        summary ? hint9(document, "summary", [summary]) : "",
+        summaryNode ? hint9(document, "summary", [summaryNode]) : "",
         body.length ? hint9(document, "text", body) : ""
       ]);
     });
@@ -515,15 +532,20 @@ var CustomImportScript = (() => {
       if (titleEl) {
         const h = document.createElement(/^H[1-6]$/.test(titleEl.tagName) ? titleEl.tagName.toLowerCase() : "h2");
         h.textContent = titleEl.textContent.trim();
-        cells.push([hint10(document, "title", [h])]);
+        cells.push(["accordion-split-group", hint10(document, "title", [h])]);
       }
       group.querySelectorAll(".cmp-accordion__item").forEach((item) => {
         const t = item.querySelector(".cmp-accordion__title") || item.querySelector(".cmp-accordion__button, .cmp-accordion__header");
         const summary = t ? t.textContent.replace(/\s+/g, " ").trim() : "";
         const body = panelContent2(item.querySelector(".cmp-accordion__panel"));
         if (!summary && !body.length) return;
+        let summaryNode = null;
+        if (summary) {
+          summaryNode = document.createElement("h3");
+          summaryNode.textContent = summary;
+        }
         cells.push([
-          summary ? hint10(document, "summary", [summary]) : "",
+          summaryNode ? hint10(document, "summary", [summaryNode]) : "",
           body.length ? hint10(document, "text", body) : ""
         ]);
       });
@@ -734,13 +756,38 @@ var CustomImportScript = (() => {
         el.removeAttribute("onclick");
       });
       removeEmptyDivs(element);
+      relativizeSiteLinks(element);
+      stripMapsTracking(element);
     }
+  }
+  var SITE_HOST_RE = /^(?:https?:)?\/\/(?:www\.)?destinationpet\.com(?=[/?#]|$)/i;
+  var ASSET_PATH_RE = /\/is\/image\/|\/adobe\/assets\/urn:|^\/content\/dam\/|\.(?:png|jpe?g|gif|webp|svg|avif)$/i;
+  function relativizeSiteLinks(element) {
+    element.querySelectorAll("a[href]").forEach((a) => {
+      const href = (a.getAttribute("href") || "").trim();
+      if (!SITE_HOST_RE.test(href)) return;
+      let rest = href.replace(SITE_HOST_RE, "");
+      if (!rest.startsWith("/")) rest = `/${rest}`;
+      const pathOnly = rest.split(/[?#]/)[0];
+      if (ASSET_PATH_RE.test(pathOnly)) return;
+      a.setAttribute("href", rest);
+    });
+  }
+  function stripMapsTracking(element) {
+    element.querySelectorAll('a[href*="google.com/maps"]').forEach((a) => {
+      const href = a.getAttribute("href") || "";
+      const qIdx = href.indexOf("?");
+      if (qIdx < 0) return;
+      const base = href.slice(0, qIdx);
+      const mid = href.slice(qIdx + 1).split("&").find((pair) => pair.startsWith("mid="));
+      a.setAttribute("href", base.includes("/maps/d/") && mid ? `${base}?${mid}` : base);
+    });
   }
 
   // tools/importer/transformers/destinationpet-sections.js
-  var SECTION_MARKER_ATTR = "data-excat-section-id";
-  var GENERIC_MARKER_ATTR = "data-excat-generic-section";
-  var GENERIC_END_ATTR = "data-excat-generic-end";
+  var MARKER_ATTR = "data-excat-section-style";
+  var TEMP_ATTR = "data-excat-temp";
+  var END_ATTR = "data-excat-generic-end";
   var MAIN_GRID = ".root.responsivegrid.aem-GridColumn > .cmp-container > .aem-Grid";
   var STYLE_CLASSES = [
     ["background-color--tertiary", "tertiary"],
@@ -748,6 +795,7 @@ var CustomImportScript = (() => {
     ["background-color--primary", "primary"]
   ];
   var BG_SELECTOR = STYLE_CLASSES.map(([cls]) => `.${cls}`).join(", ");
+  var CONTENT_TAGS = "img, picture, video, iframe, svg, table, input, select, textarea, button, object, embed";
   function isTopLevel(el) {
     const parent = el.parentElement;
     return !!parent && parent.matches(MAIN_GRID);
@@ -776,29 +824,39 @@ var CustomImportScript = (() => {
   function isHr(el) {
     return !!el && el.tagName === "HR";
   }
-  function findGenericCandidates(element, handled) {
-    const out = [];
-    const grids = element.querySelectorAll(MAIN_GRID);
-    grids.forEach((grid) => {
+  function collectEntries(element, sections) {
+    const entries = [];
+    const handled = [];
+    sections.forEach((section) => {
+      const el = querySection(element, section.selector);
+      if (!el || handled.includes(el)) return;
+      handled.push(el);
+      entries.push({ el, top: el, style: section.style || styleFor(el) });
+    });
+    element.querySelectorAll(MAIN_GRID).forEach((grid) => {
       [...grid.children].forEach((top) => {
         if (!top.classList.contains("aem-GridColumn")) return;
+        if (handled.some((h) => h === top || h.contains(top) || top.contains(h))) return;
         const topStyle = styleFor(top);
-        let candidate = null;
         if (topStyle) {
-          candidate = { el: top, style: topStyle, top };
-        } else {
-          const firstCol = top.querySelector(".container__column");
-          const band = firstCol && firstCol.firstElementChild;
-          if (band && band.classList.contains("columncontainer") && band.matches(BG_SELECTOR)) {
-            candidate = { el: band, style: styleFor(band), top };
-          }
+          entries.push({ el: top, top, style: topStyle });
+          return;
         }
-        if (!candidate) return;
-        if (handled.some((h) => h === candidate.el || h.contains(candidate.el))) return;
-        out.push(candidate);
+        const firstCol = top.querySelector(".container__column");
+        const band = firstCol && firstCol.firstElementChild;
+        if (band && band.classList.contains("columncontainer") && band.matches(BG_SELECTOR)) {
+          entries.push({ el: band, top, style: styleFor(band) });
+          return;
+        }
+        entries.push({ el: top, top, style: null });
       });
     });
-    return out;
+    entries.sort((a, b) => a.el.compareDocumentPosition(b.el) & 4 ? -1 : 1);
+    return entries;
+  }
+  function isStaggerContinuation(prevEntry, entry) {
+    if (!prevEntry || prevEntry.style || entry.style) return false;
+    return entry.top === entry.el && entry.el.classList.contains("mediainfo") && prevEntry.el.classList.contains("mediainfo") && entry.el.previousElementSibling === prevEntry.el;
   }
   function edgeAncestor(el, top, dir) {
     let node = el;
@@ -806,67 +864,66 @@ var CustomImportScript = (() => {
     while (node !== top && !node[sib] && node.parentElement) node = node.parentElement;
     return node;
   }
+  function collapseEmptySections(element) {
+    const doc = element.ownerDocument;
+    const walker = doc.createTreeWalker(
+      element,
+      1 | 4
+      /* SHOW_ELEMENT | SHOW_TEXT */
+    );
+    const toRemove = [];
+    let hasContent = false;
+    while (walker.nextNode()) {
+      const n = walker.currentNode;
+      if (n.nodeType === 3) {
+        if (n.nodeValue.trim()) hasContent = true;
+      } else if (n.tagName === "HR" && !n.closest("table")) {
+        if (!hasContent) toRemove.push(n);
+        hasContent = false;
+      } else if (n.matches(CONTENT_TAGS)) {
+        hasContent = true;
+      }
+    }
+    toRemove.forEach((hr) => hr.remove());
+  }
   function transform2(hookName, element, payload) {
     const sections = payload && payload.template && payload.template.sections || [];
     const doc = element.ownerDocument;
     if (hookName === "beforeTransform") {
-      const handled = [];
-      for (let i = sections.length - 1; i >= 0; i -= 1) {
-        const section = sections[i];
-        const sectionEl = querySection(element, section.selector);
-        if (sectionEl) handled.push(sectionEl);
-        if (i === 0 && !section.style) continue;
-        if (!sectionEl) continue;
-        const hr = doc.createElement("hr");
-        if (section.style) hr.setAttribute(SECTION_MARKER_ATTR, section.id);
-        sectionEl.before(hr);
-      }
-      const candidates = findGenericCandidates(element, handled);
-      for (let i = candidates.length - 1; i >= 0; i -= 1) {
-        const { el, style, top } = candidates[i];
-        const id = `g${i}`;
-        const endNode = edgeAncestor(el, top, "next");
-        const next = endNode.nextElementSibling;
-        if (next && !isHr(next)) {
-          if (endNode === top) endNode.after(doc.createElement("hr"));
-          else endNode.setAttribute(GENERIC_END_ATTR, "true");
+      const entries = collectEntries(element, sections);
+      for (let i = entries.length - 1; i >= 0; i -= 1) {
+        const entry = entries[i];
+        const { el, top, style } = entry;
+        if (style) {
+          const endNode = edgeAncestor(el, top, "next");
+          const next = endNode.nextElementSibling;
+          if (next && !isHr(next)) {
+            if (endNode === top) endNode.after(doc.createElement("hr"));
+            else endNode.setAttribute(END_ATTR, "true");
+          }
         }
+        if (isStaggerContinuation(entries[i - 1], entry)) continue;
         const startNode = edgeAncestor(el, top, "prev");
         const prev = startNode.previousElementSibling;
         if (isHr(prev)) {
-          prev.setAttribute(GENERIC_MARKER_ATTR, `${id}|${style}`);
-        } else {
-          const hr = doc.createElement("hr");
-          hr.setAttribute(GENERIC_MARKER_ATTR, `${id}|${style}`);
-          if (!prev) hr.setAttribute("data-excat-temp", "true");
-          startNode.before(hr);
+          if (style) prev.setAttribute(MARKER_ATTR, style);
+          continue;
         }
+        if (!prev && !style) continue;
+        const hr = doc.createElement("hr");
+        if (style) hr.setAttribute(MARKER_ATTR, style);
+        if (!prev) hr.setAttribute(TEMP_ATTR, "true");
+        startNode.before(hr);
       }
     }
     if (hookName === "afterTransform") {
-      for (let i = sections.length - 1; i >= 0; i -= 1) {
-        const section = sections[i];
-        if (!section.style) continue;
-        const marker = element.querySelector(`[${SECTION_MARKER_ATTR}="${section.id}"]`);
-        const anchor = marker || querySection(element, section.selector);
-        if (!anchor) continue;
-        const metadataBlock = WebImporter.Blocks.createBlock(doc, {
-          name: "Section Metadata",
-          cells: { style: section.style }
-        });
-        anchor.after(metadataBlock);
-        if (marker) {
-          marker.removeAttribute(SECTION_MARKER_ATTR);
-          if (i === 0) marker.remove();
-        }
-      }
-      element.querySelectorAll(`[${GENERIC_END_ATTR}]`).forEach((endNode) => {
-        endNode.removeAttribute(GENERIC_END_ATTR);
+      element.querySelectorAll(`[${END_ATTR}]`).forEach((endNode) => {
+        endNode.removeAttribute(END_ATTR);
         const next = endNode.nextElementSibling;
         if (next && !isHr(next)) endNode.after(doc.createElement("hr"));
       });
-      element.querySelectorAll(`[${GENERIC_MARKER_ATTR}]`).forEach((marker) => {
-        const [, style] = (marker.getAttribute(GENERIC_MARKER_ATTR) || "").split("|");
+      element.querySelectorAll(`[${MARKER_ATTR}]`).forEach((marker) => {
+        const style = marker.getAttribute(MARKER_ATTR);
         if (style) {
           const metadataBlock = WebImporter.Blocks.createBlock(doc, {
             name: "Section Metadata",
@@ -874,9 +931,10 @@ var CustomImportScript = (() => {
           });
           marker.after(metadataBlock);
         }
-        marker.removeAttribute(GENERIC_MARKER_ATTR);
-        if (marker.getAttribute("data-excat-temp") === "true") marker.remove();
+        marker.removeAttribute(MARKER_ATTR);
+        if (marker.getAttribute(TEMP_ATTR) === "true") marker.remove();
       });
+      collapseEmptySections(element);
     }
   }
 
@@ -924,12 +982,20 @@ var CustomImportScript = (() => {
   function altToLinkText(alt) {
     return alt || EMPTY_ALT_SENTINEL;
   }
+  var DROP_DM_PARAMS = ["ts", "dpr", "fmt"];
+  function normalizeDmUrl(src) {
+    const qIdx = src.indexOf("?");
+    if (qIdx < 0) return src;
+    const kept = src.slice(qIdx + 1).split("&").filter((pair) => pair && !DROP_DM_PARAMS.includes(pair.split("=")[0]));
+    return kept.length ? `${src.slice(0, qIdx)}?${kept.join("&")}` : src.slice(0, qIdx);
+  }
   function transform3(hookName, element, payload) {
     if (hookName !== "afterTransform") return;
     const doc = element.ownerDocument;
     element.querySelectorAll("img").forEach((img) => {
-      const src = img.getAttribute("src") || "";
-      if (!detectDynamicMediaUrl(src)) return;
+      const rawSrc = img.getAttribute("src") || "";
+      if (!detectDynamicMediaUrl(rawSrc)) return;
+      const src = normalizeDmUrl(rawSrc);
       const alt = img.getAttribute("alt") || "";
       const linkedAnchor = findLinkedDmCarrier(img);
       if (linkedAnchor) {

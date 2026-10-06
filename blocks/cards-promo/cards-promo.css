@@ -1,55 +1,77 @@
+/* cards-promo: centred single-column promo card (logo, copy, CTA) */
 .cards-promo > ul {
   list-style: none;
-  margin: 0 auto;
+  margin: 0;
   padding: 0;
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 40px;
-  max-width: 480px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 24px;
 }
 
 .cards-promo .cards-promo-card {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+  box-sizing: border-box;
+  flex: 0 0 100%;
+  min-width: 0;
+  padding: 24px 0 48px;
   text-align: center;
+  color: var(--text-color);
 }
 
 .cards-promo .cards-promo-card-image {
   line-height: 0;
-  margin-bottom: 24px;
 }
 
-.cards-promo .cards-promo-card-image img {
-  display: block;
-  width: 100%;
-  max-width: 320px;
-  height: auto;
-  object-fit: contain;
-}
-
-.cards-promo .cards-promo-card-body > :first-child {
-  margin-top: 0;
-}
-
-.cards-promo .cards-promo-card-body > :last-child {
-  margin-bottom: 0;
-}
-
-.cards-promo .cards-promo-card-body .button-container {
+.cards-promo .cards-promo-card-image picture {
   display: flex;
   justify-content: center;
 }
 
+.cards-promo .cards-promo-card-image img {
+  display: block;
+  width: auto;
+  max-width: 100%;
+  height: auto;
+}
+
+.cards-promo .cards-promo-card-body {
+  margin-top: 10px;
+}
+
+.cards-promo .cards-promo-card-body p {
+  margin: 0 0 10px;
+  font-size: var(--body-font-size-m);
+  line-height: 1.4;
+  letter-spacing: -0.01em;
+}
+
+.cards-promo .cards-promo-card-body p.button-container {
+  margin: 0;
+  letter-spacing: normal;
+}
+
 @media (width >= 600px) {
-  .cards-promo > ul {
-    max-width: 420px;
+  .cards-promo .cards-promo-card {
+    flex-basis: calc((100% - 24px) / 2);
+    padding-bottom: 64px;
+  }
+
+}
+
+/* from 768px the source copy wrapper has margin 20px 0 (10px below that); the p keeps
+   its own 0 0 10px margin, so the extra 10px before the CTA is recreated as padding */
+@media (width >= 768px) {
+  .cards-promo .cards-promo-card-body {
+    margin-top: 20px;
+  }
+
+  .cards-promo .cards-promo-card-body p:not(.button-container) + p.button-container {
+    padding-top: 10px;
   }
 }
 
 @media (width >= 900px) {
-  .cards-promo > ul:has(> li:nth-child(2)) {
-    max-width: 1200px;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  .cards-promo .cards-promo-card {
+    flex-basis: calc((100% - 48px) / 3);
   }
 }

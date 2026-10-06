@@ -119,5 +119,42 @@ export default function transform(hookName, element, payload) {
 
     // Empty spacer divs.
     removeEmptyDivs(element);
+
+    // Same-site absolute links -> root-relative (content/index had https://www.destinationpet.com/...).
+    relativizeSiteLinks(element);
+
+    // Google Maps links: strip tracking query params (a bare '&' breaks the xwalk JCR XML).
+    stripMapsTracking(element);
   }
+}
+
+// Rewrites <a href> on https?://(www.)destinationpet.com to root-relative paths (query/hash kept).
+// Other hosts (images.destpet.com DM/Scene7, form.jotform.com, socials) never match the host test;
+// same-host asset/DM paths (/is/image/, /content/dam/, image files) are left absolute.
+const SITE_HOST_RE = /^(?:https?:)?\/\/(?:www\.)?destinationpet\.com(?=[/?#]|$)/i;
+const ASSET_PATH_RE = /\/is\/image\/|\/adobe\/assets\/urn:|^\/content\/dam\/|\.(?:png|jpe?g|gif|webp|svg|avif)$/i;
+
+function relativizeSiteLinks(element) {
+  element.querySelectorAll('a[href]').forEach((a) => {
+    const href = (a.getAttribute('href') || '').trim();
+    if (!SITE_HOST_RE.test(href)) return;
+    let rest = href.replace(SITE_HOST_RE, '');
+    if (!rest.startsWith('/')) rest = `/${rest}`;
+    const pathOnly = rest.split(/[?#]/)[0];
+    if (ASSET_PATH_RE.test(pathOnly)) return;
+    a.setAttribute('href', rest);
+  });
+}
+
+// google.com/maps place links carry tracking params (sa, ved, entry) -> drop the query.
+// My Maps viewer links (/maps/d/) keep only the map id (mid).
+function stripMapsTracking(element) {
+  element.querySelectorAll('a[href*="google.com/maps"]').forEach((a) => {
+    const href = a.getAttribute('href') || '';
+    const qIdx = href.indexOf('?');
+    if (qIdx < 0) return;
+    const base = href.slice(0, qIdx);
+    const mid = href.slice(qIdx + 1).split('&').find((pair) => pair.startsWith('mid='));
+    a.setAttribute('href', base.includes('/maps/d/') && mid ? `${base}?${mid}` : base);
+  });
 }

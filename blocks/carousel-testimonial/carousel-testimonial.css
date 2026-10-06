@@ -1,6 +1,26 @@
-/* carousel-testimonial: structural layout only (no brand colour/typography) */
+/*
+ * carousel-testimonial: text-only testimonial slider (values from source computed styles).
+ * The block root itself has no margin/padding (as on the source .carousel.panelcontainer).
+ */
 .carousel-testimonial {
   position: relative;
+  margin: 0;
+  padding: 0;
+  color: var(--text-color);
+}
+
+/*
+ * source .container__column padding (12px) around the carousel, minus the difference
+ * in section padding on mobile (source 32px vs 40px here)
+ */
+main > .section > .carousel-testimonial-wrapper {
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+
+/* source: empty carousel title h2 (margin-bottom 5px) above the slick track */
+.carousel-testimonial .carousel-testimonial-container {
+  padding-top: 5px;
 }
 
 .carousel-testimonial .carousel-testimonial-slides,
@@ -22,55 +42,137 @@
   display: none;
 }
 
+/*
+ * slides stretch to the tallest testimonial, like the source slick track.
+ * Top padding = 24px card padding + 16px (source header row margin above the quote mark).
+ */
 .carousel-testimonial .carousel-testimonial-slide {
   flex: 0 0 100%;
   width: 100%;
+  padding: 40px 24px 24px;
   scroll-snap-align: start;
   box-sizing: border-box;
 }
 
+/*
+ * flex column so the quote marks (pseudo-elements) and the paragraphs are siblings:
+ * lets the author name paragraph be ordered above the opening mark, as on the source.
+ */
 .carousel-testimonial .carousel-testimonial-quote {
+  display: flex;
+  flex-direction: column;
   margin: 0;
   padding: 0;
 }
 
-.carousel-testimonial .carousel-testimonial-content > :first-child {
-  margin-top: 0;
+.carousel-testimonial .carousel-testimonial-content {
+  display: contents;
 }
 
-.carousel-testimonial .carousel-testimonial-content > :last-child {
-  margin-bottom: 0;
+/* opening / closing quote marks: source icomoon glyph U+E905 (24px), lower one rotated 180deg */
+.carousel-testimonial .carousel-testimonial-quote::before,
+.carousel-testimonial .carousel-testimonial-quote::after {
+  content: '';
+  display: block;
+  width: 24px;
+  height: 24px;
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1024 1024'%3E%3Cpath fill='%235a471b' d='M219 901Q186 901 156.5 892Q127 883 102 865Q78 846 58.5 820.5Q39 795 26 763Q13 731 6.5 694.5Q0 658 0 617Q0 567 8 519.5Q16 472 32 427Q50 380 76 336.5Q102 293 138 254Q173 214 218 181.5Q263 149 319 122L442 236Q402 250 367 268Q332 286 301 310Q272 333 248 359.5Q224 386 205 415Q187 444 174.5 474Q162 504 155 535L167 541Q173 536 180 532.5Q187 529 196 526Q205 523 218 521.5Q231 520 249 520Q266 520 284.5 525Q303 530 322 541Q341 551 356.5 566.5Q372 582 383 602Q396 621 403 646.5Q410 672 410 705Q410 731 403 755Q396 779 383 801Q372 823 355 841.5Q338 860 316 874Q294 887 270 894Q246 901 219 901ZM769 901Q736 901 706.5 892Q677 883 652 865Q628 846 609 820.5Q590 795 576 763Q563 731 556.5 694.5Q550 658 550 617Q550 567 558 519.5Q566 472 582 427Q600 380 626 336.5Q652 293 688 254Q723 214 768 181.5Q813 149 869 122L992 236Q952 250 917 268Q882 286 851 310Q822 333 798 359.5Q774 386 755 415Q737 444 724.5 474Q712 504 705 535L717 541Q723 536 730 532.5Q737 529 746 526Q755 523 768 521.5Q781 520 799 520Q816 520 834.5 525Q853 530 872 541Q891 551 906.5 566.5Q922 582 933 602Q946 621 953 646.5Q960 672 960 705Q960 731 953 755Q946 779 933 801Q922 823 905 841.5Q888 860 866 874Q844 887 820 894Q796 901 769 901Z'/%3E%3C/svg%3E") no-repeat center / 24px 24px;
 }
 
+.carousel-testimonial .carousel-testimonial-quote::before {
+  margin-bottom: 18px;
+}
+
+/* source closing mark is inline-block in a 28px line box (6px + quote p's 10px margin above) */
+.carousel-testimonial .carousel-testimonial-quote::after {
+  margin: 6px 0 4px;
+  transform: rotate(180deg);
+}
+
+/*
+ * quote text + attribution render as one paragraph (line break) on the source,
+ * so only the last paragraph carries the source p margin (0 0 10px)
+ */
+.carousel-testimonial .carousel-testimonial-content p {
+  margin: 0;
+  font-size: var(--body-font-size-m);
+  line-height: 22.4px;
+  letter-spacing: -0.16px;
+  color: var(--text-color);
+}
+
+.carousel-testimonial .carousel-testimonial-content p:last-child {
+  margin-bottom: 10px;
+}
+
+/*
+ * author name (first paragraph, bold only): source p.testimonial__header-name sits above
+ * the opening mark at the 24px card padding (pulled up into the 16px header offset),
+ * 700 weight, 20.8px line height, 15px above the mark
+ */
+.carousel-testimonial .carousel-testimonial-content p:first-child:not(:only-child):has(> strong:only-child) {
+  order: -1;
+  margin: -16px 0 15px;
+  line-height: 20.8px;
+  font-weight: 700;
+}
+
+.carousel-testimonial .carousel-testimonial-content strong,
+.carousel-testimonial .carousel-testimonial-content b {
+  font-weight: 700;
+}
+
+/* dot navigation: overlays the slide's bottom padding (source: absolute, bottom 12px) */
 .carousel-testimonial .carousel-testimonial-nav {
-  margin-top: 1rem;
+  position: absolute;
+  right: 0;
+  bottom: 12px;
+  left: 0;
 }
 
 .carousel-testimonial .carousel-testimonial-dots {
   display: flex;
   justify-content: center;
-  gap: 0.5rem;
+}
+
+.carousel-testimonial .carousel-testimonial-dots li {
+  width: 12px;
+  height: 12px;
+  margin: 0 8px 0 0;
+}
+
+/* source: only the gap between dots, none after the last one */
+.carousel-testimonial .carousel-testimonial-dots li:last-child {
+  margin-right: 0;
 }
 
 .carousel-testimonial .carousel-testimonial-dot {
   display: block;
-  width: 10px;
-  height: 10px;
+  width: 12px;
+  min-width: 0;
+  height: 12px;
   margin: 0;
   padding: 0;
   border: 0;
   border-radius: 50%;
-  background-color: currentcolor;
-  opacity: 0.3;
+  background-color: var(--brand-beige);
+  background-image: none;
+  box-shadow: none;
   cursor: pointer;
 }
 
+.carousel-testimonial .carousel-testimonial-dot:hover,
+.carousel-testimonial .carousel-testimonial-dot:focus {
+  background-image: none;
+}
+
 .carousel-testimonial .carousel-testimonial-dot[aria-current='true'] {
-  opacity: 1;
+  background-color: var(--brand-light-blue);
 }
 
 @media (width >= 900px) {
-  .carousel-testimonial .carousel-testimonial-slide {
-    padding: 0 1rem;
+  main > .section > .carousel-testimonial-wrapper {
+    padding-top: 12px;
+    padding-bottom: 12px;
   }
 }

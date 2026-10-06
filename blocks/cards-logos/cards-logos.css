@@ -1,60 +1,145 @@
-/* cards-logos: structural layout only (no brand colour/typography) */
+/* cards-logos: centred grid of linked location logos with optional caption */
+
+/* source logo rows sit 28px below the state band; the next band's own 40px top padding
+   supplies the (source 36px) gap below the last row */
+main > .section.cards-logos-container {
+  padding: 28px 0 0;
+}
+
+/* source states whose logo container uses the 40px top spacing (vs 16px) */
+main > .section.primary:has(:is(#california, #florida, #georgia, #illinois, #indiana, #louisiana, #maine, #maryland))
+  + .section.cards-logos-container {
+  padding-top: 52px;
+}
+
+/* source Arizona/California/Connecticut/Florida wrappers add 40px above and below the state */
+main > .section.cards-logos-container:has(+ .section.primary :is(#california, #connecticut, #florida)) {
+  padding-bottom: 80px;
+}
+
+main > .section.cards-logos-container:has(+ .section.primary :is(#colorado, #georgia)) {
+  padding-bottom: 40px;
+}
+
 .cards-logos > ul {
+  --cards-logos-cols: 1;
+
   list-style: none;
   margin: 0;
   padding: 0;
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 1.5rem;
+  display: flex;
+  flex-wrap: wrap;
   justify-content: center;
+  gap: 24px 0;
 }
 
 .cards-logos .cards-logos-card {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
-  gap: 0.5rem;
+  /* column count of the row this card sits in (a short last row gets its own track) */
+  --cards-logos-track: var(--cards-logos-cols);
+
+  box-sizing: border-box;
+  flex: 0 0 calc(100% / var(--cards-logos-track));
   min-width: 0;
+  padding: 0 8px;
+  text-align: center;
 }
 
-.cards-logos .cards-logos-card-image,
+.cards-logos .cards-logos-card-image {
+  line-height: 0;
+}
+
 .cards-logos .cards-logos-card-image a {
-  display: block;
-  width: 100%;
+  display: inline-block;
+  max-width: 100%;
 }
 
-.cards-logos .cards-logos-card-image picture,
+.cards-logos .cards-logos-card-image picture {
+  display: block;
+}
+
 .cards-logos .cards-logos-card-image img {
   display: block;
   margin: 0 auto;
-}
-
-.cards-logos .cards-logos-card-image img {
-  width: 100%;
-  max-width: 220px;
+  width: 300px;
+  max-width: 100%;
   height: auto;
   aspect-ratio: 1 / 1;
   object-fit: contain;
 }
 
-.cards-logos .cards-logos-card-caption > * {
-  margin: 0;
+.cards-logos .cards-logos-card-caption {
+  margin-top: 10px;
+}
+
+.cards-logos .cards-logos-card-caption p {
+  margin: 0 0 10px;
+  font-size: 20px;
+  font-weight: 600;
+  line-height: 1.4;
+  color: var(--brand-navy);
+}
+
+/* heading captions (title component on the source) sit flush under the logo */
+.cards-logos .cards-logos-card-caption:has(> h3:first-child) {
+  margin-top: 0;
+}
+
+.cards-logos .cards-logos-card-caption h3 {
+  margin: 0 0 5px;
+  font-size: var(--heading-size-s);
+}
+
+@media (width >= 768px) {
+  .cards-logos .cards-logos-card-caption h3 {
+    font-size: var(--heading-size-l);
+  }
+}
+
+/* California captions use the body text grey on the source (other states are navy) */
+main > .section.primary:has(#california) + .section .cards-logos-card-caption p {
+  color: var(--text-color);
+}
+
+/* source rows: 12px row inset + 12px column padding (logos 290px on a 314px pitch when 4-up) */
+@media (width >= 600px) {
+  .cards-logos > ul {
+    --cards-logos-cols: 2;
+
+    padding: 0 12px;
+    row-gap: 40px;
+  }
+
+  .cards-logos .cards-logos-card {
+    padding: 0 12px;
+  }
 }
 
 @media (width >= 900px) {
   .cards-logos.cards-logos-cols-3 > ul {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
+    --cards-logos-cols: 3;
   }
 
   .cards-logos.cards-logos-cols-4 > ul {
-    grid-template-columns: repeat(4, minmax(0, 1fr));
+    --cards-logos-cols: 4;
   }
-}
 
-@media (width >= 600px) and (width < 900px) {
-  .cards-logos.cards-logos-cols-3 > ul,
-  .cards-logos.cards-logos-cols-4 > ul {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
+  /* a short last row gets its own 2- or 3-column track instead of 4-up widths
+     (first card of the short row, then the cards that follow it) */
+  .cards-logos.cards-logos-cols-4 .cards-logos-card:nth-child(4n + 1):nth-last-child(3) {
+    --cards-logos-track: 3;
+  }
+
+  .cards-logos.cards-logos-cols-4 .cards-logos-card:nth-child(4n + 1):nth-last-child(2),
+  .cards-logos.cards-logos-cols-3 .cards-logos-card:nth-child(3n + 1):nth-last-child(2) {
+    --cards-logos-track: 2;
+  }
+
+  .cards-logos.cards-logos-cols-4 .cards-logos-card:nth-child(4n + 1):nth-last-child(3) ~ .cards-logos-card {
+    --cards-logos-track: 3;
+  }
+
+  .cards-logos.cards-logos-cols-4 .cards-logos-card:nth-child(4n + 1):nth-last-child(2) ~ .cards-logos-card,
+  .cards-logos.cards-logos-cols-3 .cards-logos-card:nth-child(3n + 1):nth-last-child(2) ~ .cards-logos-card {
+    --cards-logos-track: 2;
   }
 }

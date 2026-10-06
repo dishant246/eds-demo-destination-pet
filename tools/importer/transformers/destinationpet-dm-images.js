@@ -62,13 +62,26 @@ function altToLinkText(alt) {
 }
 // ---- End canonical helpers ----
 
+// Drop cache-busting / delivery params (ts, dpr, fmt) — scripts.js rebuilds renditions with its own
+// wid/fmt. Keeps presets such as $Square$ / $Rectangle$ verbatim (literal $). Leaves a single query
+// pair at most, so the URL carries no '&' (bare '&' breaks the xwalk JCR XML attribute values).
+const DROP_DM_PARAMS = ['ts', 'dpr', 'fmt'];
+function normalizeDmUrl(src) {
+  const qIdx = src.indexOf('?');
+  if (qIdx < 0) return src;
+  const kept = src.slice(qIdx + 1).split('&')
+    .filter((pair) => pair && !DROP_DM_PARAMS.includes(pair.split('=')[0]));
+  return kept.length ? `${src.slice(0, qIdx)}?${kept.join('&')}` : src.slice(0, qIdx);
+}
+
 export default function transform(hookName, element, payload) {
   if (hookName !== 'afterTransform') return;
   const doc = element.ownerDocument;
 
   element.querySelectorAll('img').forEach((img) => {
-    const src = img.getAttribute('src') || '';
-    if (!detectDynamicMediaUrl(src)) return;
+    const rawSrc = img.getAttribute('src') || '';
+    if (!detectDynamicMediaUrl(rawSrc)) return;
+    const src = normalizeDmUrl(rawSrc);
 
     // Preserve alt verbatim; empty alt -> visible sentinel (auto-block maps it back to alt="").
     const alt = img.getAttribute('alt') || '';

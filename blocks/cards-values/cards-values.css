@@ -1,56 +1,125 @@
+/* cards-values: centred icon/illustration cards (values, benefits) */
 .cards-values > ul {
+  /* source column rows sit 16px (mobile) / 24px (desktop) inside the content container */
+  --cards-values-inset: 16px;
+
   list-style: none;
   margin: 0;
-  padding: 0;
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 40px;
+  padding: 12px var(--cards-values-inset);
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 24px;
+}
+
+/* heading-only benefit cards (sell-your-business) use a full-bleed column row: no inset */
+.cards-values:has(.cards-values-card-body > :is(h3, h4):only-child) > ul {
+  --cards-values-inset: 0;
 }
 
 .cards-values .cards-values-card {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+  box-sizing: border-box;
+  flex: 0 0 100%;
+  min-width: 0;
+  padding: 0 0 24px;
   text-align: center;
+  color: var(--text-color);
 }
 
+/* media: source renders a 533x300 (16:9) canvas; cap the runtime rendition to that box */
 .cards-values .cards-values-card-image {
+  container-type: inline-size;
   line-height: 0;
-  margin-bottom: 24px;
+}
+
+.cards-values .cards-values-card-image picture {
+  display: block;
 }
 
 .cards-values .cards-values-card-image img {
   display: block;
+  margin: 0 auto;
   width: auto;
   max-width: 100%;
   height: auto;
-  max-height: 180px;
+  max-height: calc(100cqi * 300 / 533);
   object-fit: contain;
+
+  /* DM rendition is served without alpha; let the section colour show through the white matte */
+  mix-blend-mode: multiply;
 }
 
-.cards-values .cards-values-card-body > :first-child {
-  margin-top: 0;
+/* the $Rectangle$ DM preset is a fixed 533x300 transparent canvas (served as-is by the block JS);
+   the source stretches it to the full card width */
+.cards-values .cards-values-card-image img[src*="Rectangle"] {
+  width: 100%;
+  max-height: none;
+  aspect-ratio: 533 / 300;
+  object-fit: fill;
+  mix-blend-mode: normal;
 }
 
-.cards-values .cards-values-card-body > :last-child {
-  margin-bottom: 0;
+.cards-values .cards-values-card-body {
+  padding: 24px 0;
+}
+
+.cards-values .cards-values-card-body h2 {
+  margin: 0 0 5px;
+  font-size: var(--heading-size-l);
+  line-height: 1.2;
+  color: var(--heading-color);
+}
+
+.cards-values .cards-values-card-body h3 {
+  margin: 0 0 5px;
+  font-size: var(--heading-size-s);
+  line-height: 1.1;
+  color: var(--heading-color);
+}
+
+.cards-values .cards-values-card-body p {
+  margin: 0 0 10px;
+  font-size: var(--body-font-size-m);
+  line-height: 1.4;
+  letter-spacing: -0.01em;
+}
+
+/* from 768px the source copy wrapper has margin-top 10px (collapsing with the heading's 5px);
+   keep the p margin at 0 0 10px and recreate the extra 5px as padding */
+@media (width >= 768px) {
+  .cards-values .cards-values-card-body :is(h1, h2, h3, h4, h5, h6) + p {
+    padding-top: 5px;
+  }
 }
 
 @media (width >= 600px) {
-  .cards-values > ul {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 32px;
+  .cards-values .cards-values-card {
+    flex-basis: calc((100% - 24px) / 2);
+  }
+
+  .cards-values .cards-values-card-body {
+    padding: 24px 0 40px;
+  }
+
+  .cards-values .cards-values-card-body h2 {
+    font-size: var(--heading-size-xl);
+  }
+
+  .cards-values .cards-values-card-body h3 {
+    font-size: var(--heading-size-l);
   }
 }
 
 @media (width >= 900px) {
   .cards-values > ul {
-    grid-template-columns: repeat(3, 1fr);
+    --cards-values-inset: 24px;
   }
-}
 
-@media (width >= 1200px) {
-  .cards-values > ul {
-    gap: 48px;
+  .cards-values:has(.cards-values-card-body > :is(h3, h4):only-child) > ul {
+    --cards-values-inset: 0;
+  }
+
+  .cards-values .cards-values-card {
+    flex-basis: calc((100% - 48px) / 3);
   }
 }

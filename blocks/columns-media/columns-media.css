@@ -1,3 +1,19 @@
+/* columns-media: side-by-side media + text (source: .mediainfo / .media-info__wrapper) */
+
+/* the block carries the full source padding (.media-info__wrapper: 56px mobile, 80px desktop),
+   so the section around a columns-media-only run adds none of its own */
+main > .section.columns-media-container:not(:has(> :not(.columns-media-wrapper))) {
+  padding-top: 0;
+  padding-bottom: 0;
+}
+
+/* mobile: stacked in DOM order; no background of its own (the section supplies it).
+   bottom = 56px wrapper padding + 16px bottom margin on the source's second column */
+.columns-media {
+  padding: 56px 0 72px;
+  background-color: transparent;
+}
+
 .columns-media .columns-media-row {
   display: flex;
   flex-direction: column;
@@ -9,49 +25,157 @@
 }
 
 .columns-media .columns-media-row > div {
-  order: 1;
   min-width: 0;
 }
 
-.columns-media .columns-media-row > .columns-media-img-col {
-  order: 0;
+/* image column: natural-size image centred in the column (source .image__center) */
+.columns-media .columns-media-img-col {
+  display: flex;
+  justify-content: center;
   line-height: 0;
 }
 
-.columns-media .columns-media-img-col picture,
+.columns-media .columns-media-img-col picture {
+  display: block;
+  max-width: 100%;
+}
+
 .columns-media .columns-media-img-col img {
   display: block;
-  width: 100%;
+  width: auto;
+  max-width: 100%;
   height: auto;
+}
+
+/* the Dynamic Media $Rectangle$ preset serves headshots letterboxed in a 533x300 box on the source */
+.columns-media .columns-media-img-col img[src*='$Rectangle$'] {
+  width: 533px;
+  aspect-ratio: 533 / 300;
+  object-fit: contain;
+}
+
+/* text column */
+.columns-media .columns-media-text-col h2 {
+  margin: 0 0 5px;
+  font-size: var(--heading-font-size-l);
+  line-height: 1.2;
+}
+
+.columns-media .columns-media-text-col h3 {
+  margin: 0 0 5px;
+  font-size: var(--heading-font-size-s);
+  line-height: 1.1;
+}
+
+/* title + subtitle pairing renders in the CTA colour on the source (.title.color--cta) */
+.columns-media .columns-media-text-col:has(> h2 + h3) :is(h2, h3) {
+  color: var(--brand-orange);
+}
+
+.columns-media .columns-media-text-col p {
+  margin: 0 0 10px;
+  font-size: var(--body-font-size-m);
+  line-height: 22.4px;
+  letter-spacing: -0.16px;
+  color: var(--text-color);
+}
+
+/* the source rich text wrapper carries the space above the copy (p itself is 0 0 10px): an empty
+   block with that margin collapses with the heading's 5px - below a title it is margin__top--medium
+   (10px mobile / 20px desktop), below a subtitle or atop a statement cell margin__top--small (5 / 10) */
+.columns-media .columns-media-text-col > :is(h1, h2) + p::before {
+  content: '';
+  display: block;
+  margin-top: 10px;
+}
+
+.columns-media .columns-media-text-col > :is(h3, h4, h5, h6) + p::before,
+.columns-media .columns-media-text-col > p:first-child::before {
+  content: '';
+  display: block;
+  margin-top: 5px;
+}
+
+.columns-media .columns-media-text-col strong,
+.columns-media .columns-media-text-col b {
+  font-weight: 700;
+}
+
+/* text-only statement (no heading) - larger semi-bold copy (about-us stagger rows) */
+.columns-media .columns-media-text-col:not(:has(h1, h2, h3, h4, h5, h6)) p {
+  font-size: 20px;
+  font-weight: 600;
+  line-height: 28px;
+  letter-spacing: normal;
 }
 
 .columns-media .columns-media-text-col > :first-child {
   margin-top: 0;
 }
 
-.columns-media .columns-media-text-col > :last-child {
-  margin-bottom: 0;
+/* source rich text wrapper (margin__bottom--medium: 10px mobile / 20px desktop) below the column
+   content; collapses with the last paragraph's 10px */
+.columns-media .columns-media-text-col::after {
+  content: '';
+  display: block;
+  margin-bottom: 10px;
+}
+
+/* image-right statement rows (about-us stagger 2) are right-aligned on the source */
+.columns-media.reverse .columns-media-text-col:not(:has(h1, h2, h3, h4, h5, h6)) p {
+  text-align: right;
 }
 
 @media (width >= 900px) {
+  .columns-media {
+    padding: 80px 0;
+  }
+
   .columns-media .columns-media-row {
     flex-direction: row;
     align-items: center;
-    gap: 48px;
+    justify-content: center;
+    gap: 130px;
+  }
+
+  /* reverse variant: source .media-info--right (row-reverse on desktop only) */
+  .columns-media.reverse .columns-media-row {
+    flex-direction: row-reverse;
   }
 
   .columns-media .columns-media-row > div {
     flex: 1 1 0;
-    order: unset;
   }
 
-  .columns-media .columns-media-row > .columns-media-img-col {
-    order: unset;
+  /* source aligns smaller images (e.g. 533px headshots) to the start of their column */
+  .columns-media .columns-media-img-col {
+    justify-content: flex-start;
   }
-}
 
-@media (width >= 1200px) {
-  .columns-media .columns-media-row {
-    gap: 96px;
+  /* statement rows (text cell opens with copy, no heading) with the image on the left push it
+     toward the text (source .image__right on about-us stagger 1 and 3) */
+  .columns-media:not(.reverse) .columns-media-img-col:has(+ .columns-media-text-col > p:first-child) {
+    justify-content: flex-end;
+  }
+
+  .columns-media .columns-media-text-col > :is(h1, h2) + p::before {
+    margin-top: 20px;
+  }
+
+  .columns-media .columns-media-text-col > :is(h3, h4, h5, h6) + p::before,
+  .columns-media .columns-media-text-col > p:first-child::before {
+    margin-top: 10px;
+  }
+
+  .columns-media .columns-media-text-col::after {
+    margin-bottom: 20px;
+  }
+
+  .columns-media .columns-media-text-col h2 {
+    font-size: var(--heading-font-size-xl);
+  }
+
+  .columns-media .columns-media-text-col h3 {
+    font-size: var(--heading-font-size-l);
   }
 }
