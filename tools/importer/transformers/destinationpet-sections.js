@@ -102,7 +102,8 @@ function collectEntries(element, sections) {
       const firstCol = top.querySelector('.container__column');
       const band = firstCol && firstCol.firstElementChild;
       if (band && band.classList.contains('columncontainer') && band.matches(BG_SELECTOR)) {
-        entries.push({ el: band, top, style: styleFor(band) });
+        // nested heading bands are inset to the content width (top-level bands are full-bleed)
+        entries.push({ el: band, top, style: `${styleFor(band)}, inset` });
         return;
       }
       entries.push({ el: top, top, style: null });

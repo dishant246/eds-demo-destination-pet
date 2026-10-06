@@ -286,34 +286,91 @@ main .section.secondary {
   background-color: var(--brand-light-blue);
 }
 
-/* navy bands are inset to the content width on the source, not full-bleed */
+/* navy title bands: full-bleed (legal pages); the inset variant spans the content width only
+   (our-locations state headings) */
 main .section.primary {
-  padding-bottom: 0;
-  color: #fff;
-}
-
-main .section.primary > div {
   background-color: var(--brand-navy);
-  background-clip: content-box;
-}
-
-main .section.primary > .default-content-wrapper > * {
-  margin: 0;
-  padding: 54px 16px;
+  color: #fff;
 }
 
 main .section.primary :is(h1, h2, h3, h4, h5, h6, p) {
   color: #fff;
 }
 
+/* full-bleed title band: 32px padding + 32px title on mobile, 40px / 40px on desktop */
+main .section.primary:not(.inset) {
+  padding: 32px 0;
+}
+
+main .section.primary h1 {
+  margin: 0;
+  font-size: 32px;
+  line-height: 1.2;
+  text-align: center;
+}
+
+main .section.primary.inset {
+  padding-bottom: 0;
+  background-color: transparent;
+}
+
+main .section.primary.inset > div {
+  background-color: var(--brand-navy);
+  background-clip: content-box;
+}
+
+main .section.primary.inset > .default-content-wrapper > * {
+  margin: 0;
+  padding: 54px 16px;
+}
+
 /* default content is centered on the source site and sits in a 12px-padded column */
-main > .section:not(.primary) > .default-content-wrapper {
+main > .section:not(.inset) > .default-content-wrapper {
   padding-top: 12px;
   padding-bottom: 12px;
 }
 
 main > .section > .default-content-wrapper :is(h2, h3, p) {
   text-align: center;
+}
+
+/* legal text: left-aligned copy; the source separates paragraphs with empty spacer paragraphs
+   (10px margin + 22.4px blank line + 10px margin) */
+main > .section.legal-text {
+  padding: 32px 0;
+}
+
+main > .section.legal-text > .default-content-wrapper p {
+  margin: 0 0 42.4px;
+  text-align: left;
+}
+
+main > .section.legal-text > .default-content-wrapper p:last-child {
+  margin-bottom: 0;
+}
+
+main > .section.legal-text > .default-content-wrapper h2 {
+  color: var(--text-color);
+  font-size: 24px;
+}
+
+@media (width >= 900px) {
+  main .section.primary:not(.inset) {
+    padding: 40px 0;
+  }
+
+  main .section.primary h1 {
+    font-size: 40px;
+  }
+
+  main > .section.legal-text {
+    padding: 40px 0;
+  }
+
+  main > .section.legal-text > .default-content-wrapper h2 {
+    margin-top: 10px;
+    font-size: 32px;
+  }
 }
 
 /* the hero sits flush against the next section */

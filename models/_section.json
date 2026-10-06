@@ -49,6 +49,14 @@
             {
               "name": "Light Blue",
               "value": "light-blue"
+            },
+            {
+              "name": "Inset (content width)",
+              "value": "inset"
+            },
+            {
+              "name": "Legal text (left aligned)",
+              "value": "legal-text"
             }
           ]
         }

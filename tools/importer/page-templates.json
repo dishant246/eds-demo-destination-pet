@@ -200,7 +200,34 @@
       ],
       "coverageGaps": [],
       "description": "Single-column long-form text page with heading and many stacked rich-text paragraphs",
-      "blocks": []
+      "blocks": [],
+      "sections": [
+        {
+          "id": "1",
+          "name": "Title band",
+          "selector": [
+            ".columncontainer.background-color--primary"
+          ],
+          "style": "primary",
+          "blocks": [],
+          "defaultContent": [
+            "h1"
+          ]
+        },
+        {
+          "id": "2",
+          "name": "Legal body",
+          "selector": [
+            ".columncontainer.background-color--primary + .columncontainer"
+          ],
+          "style": "legal-text",
+          "blocks": [],
+          "defaultContent": [
+            ".cmp-text p",
+            "h2"
+          ]
+        }
+      ]
     },
     {
       "name": "hero-feature-showcase",
