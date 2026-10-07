@@ -307,6 +307,23 @@ function buildAutoBlocks(main) {
   }
 }
 
+// hosts whose links open in a new tab, as on the source site (donation platform)
+const NEW_TAB_HOSTS = ['giving.classy.org'];
+
+function decorateNewTabLinks(main) {
+  main.querySelectorAll('a[href]').forEach((link) => {
+    try {
+      const { hostname } = new URL(link.href, window.location.href);
+      if (NEW_TAB_HOSTS.includes(hostname)) {
+        link.target = '_blank';
+        link.rel = 'noopener';
+      }
+    } catch (e) {
+      // ignore malformed hrefs
+    }
+  });
+}
+
 function a11yLinks(main) {
   const links = main.querySelectorAll('a');
   links.forEach((link) => {
@@ -333,6 +350,7 @@ export function decorateMain(main) {
   decorateBlocks(main);
   // add aria-label to links
   a11yLinks(main);
+  decorateNewTabLinks(main);
 }
 
 /**

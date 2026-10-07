@@ -149,6 +149,8 @@
 .columns-slider .columns-slider-text-col a:any-link {
   color: var(--text-color);
   font-weight: 700;
+  line-height: 20.8px;
+  letter-spacing: normal;
   text-decoration: underline;
 }
 

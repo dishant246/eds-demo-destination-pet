@@ -337,9 +337,11 @@ main > .section > .default-content-wrapper :is(h1, h2, h3, p) {
 /* page-level H1 in default content (e.g. "Mission Statement") and its lead line */
 main > .section > .default-content-wrapper h1 {
   font-size: 32px;
+  line-height: 1.1;
 }
 
 main > .section > .default-content-wrapper h1 + p {
+  margin-top: 10px;
   font-size: 20px;
   font-weight: 600;
   line-height: 28px;
@@ -395,6 +397,26 @@ main > .section:has(> .hero-banner-wrapper:last-child) {
   padding-bottom: 0;
 }
 
+
+main > .section > .default-content-wrapper .button-container {
+  margin-bottom: 0;
+  text-align: center;
+}
+
+/* sections of default content only: 32px padding on mobile, 40px on desktop
+   (source spacing__top-bottom--40px) */
+main > .section:not(.inset):has(> .default-content-wrapper:only-child) {
+  padding-top: 32px;
+  padding-bottom: 32px;
+}
+
+@media (width >= 900px) {
+  main > .section:not(.inset):has(> .default-content-wrapper:only-child) {
+    padding-top: var(--section-padding);
+    padding-bottom: var(--section-padding);
+  }
+}
+
 /* a section holding only a standalone image: no vertical section padding, image centred at its
    natural size; full-bleed on mobile (source image component) */
 main > .section:has(> .default-content-wrapper:only-child > picture:only-child) {
@@ -418,6 +440,14 @@ main > .section > .default-content-wrapper:only-child > picture:only-child img {
   }
 }
 
-main > .section > .default-content-wrapper .button-container {
-  text-align: center;
+/* an unstyled section holding only a CTA button: 16px above (source spacing__top--16px) */
+main > .section:not(.tertiary, .secondary, .primary):has(> .default-content-wrapper:only-child > .button-container:only-child) {
+  padding-top: 16px;
+}
+
+@media (width >= 900px) {
+  /* source CTA band: 16px top / 40px bottom around the 12px-padded column */
+  main > .section:not(.tertiary, .secondary, .primary):has(> .default-content-wrapper:only-child > .button-container:only-child) {
+    padding-bottom: 28px;
+  }
 }
