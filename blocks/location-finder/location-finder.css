@@ -1,0 +1,607 @@
+/* location-finder: intro + search beside a map, results list below the search */
+
+main > .section.location-finder-container {
+  padding: 0;
+}
+
+main > .section.location-finder-container > .location-finder-wrapper {
+  max-width: none;
+  padding: 0;
+}
+
+.location-finder {
+  --lf-text: #242424;
+  --lf-muted: #505050;
+  --lf-grey: #999;
+  --lf-line: #e9e7e2;
+  --lf-chip: var(--brand-beige);
+  --lf-star: #ed7e4c;
+
+  display: flex;
+  flex-direction: column;
+  padding: 0 24px 24px;
+  color: var(--lf-text);
+  font-family: var(--body-font-family);
+}
+
+.location-finder-sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* intro */
+.location-finder-intro h1,
+.location-finder-intro h2 {
+  margin: 0 0 16px;
+  font-size: 24px;
+  font-weight: 400;
+  line-height: 1.1;
+  letter-spacing: -0.48px;
+  color: var(--lf-text);
+  text-align: left;
+}
+
+.location-finder-intro p {
+  margin: 0 0 32px;
+  font-size: 16px;
+  line-height: 1.4;
+  letter-spacing: -0.18px;
+  color: var(--lf-muted);
+  text-align: left;
+}
+
+/* search row: field, then count + switch */
+.location-finder-form {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px 0;
+  margin-bottom: 20px;
+}
+
+.location-finder-field {
+  position: relative;
+  flex: 0 0 100%;
+}
+
+.location-finder-input {
+  box-sizing: border-box;
+  width: 100%;
+  height: 50px;
+  margin: 0;
+  border: 1px solid var(--lf-grey);
+  border-radius: 4px;
+  padding: 0 30px 0 40px;
+  background: transparent;
+  font-size: 16px;
+  color: var(--lf-grey);
+  outline: 0;
+  appearance: none;
+}
+
+.location-finder-input::placeholder {
+  color: var(--lf-grey);
+}
+
+.location-finder-input:focus {
+  border-color: var(--brand-navy);
+  color: var(--lf-text);
+}
+
+.location-finder-input:focus::placeholder {
+  color: transparent;
+}
+
+.location-finder-input::-webkit-search-cancel-button {
+  cursor: pointer;
+}
+
+.location-finder-field .location-finder-submit {
+  position: absolute;
+  top: 0;
+  left: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  min-width: 0;
+  height: 100%;
+  padding: 0;
+  background: none;
+  box-shadow: none;
+  color: #363636;
+}
+
+.location-finder-field .location-finder-submit:hover,
+.location-finder-field .location-finder-submit:focus {
+  background: none;
+  color: var(--brand-navy);
+}
+
+.location-finder-submit svg {
+  width: 22px;
+  height: 22px;
+  fill: currentcolor;
+}
+
+.location-finder-count {
+  order: 1;
+  margin: 0;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1.3;
+  color: var(--lf-muted);
+}
+
+.location-finder-count strong {
+  font-weight: 500;
+}
+
+/* map view switch */
+.location-finder-toggle {
+  position: relative;
+  order: 2;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-left: auto;
+  font-size: 14px;
+  color: #363636;
+  cursor: pointer;
+}
+
+.location-finder-checkbox {
+  position: absolute;
+  right: 0;
+  width: 51px;
+  height: 31px;
+  margin: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.location-finder-switch {
+  position: relative;
+  width: 51px;
+  height: 31px;
+  border-radius: 34px;
+  background-color: #ccc;
+  transition: background-color 0.3s;
+}
+
+.location-finder-switch::before {
+  content: '';
+  position: absolute;
+  left: 1px;
+  bottom: 1px;
+  width: 29px;
+  height: 29px;
+  border-radius: 50%;
+  background-color: #fff;
+  box-shadow: 0 5px 10px rgb(0 0 0 / 35%);
+  transition: transform 0.3s;
+}
+
+.location-finder-checkbox:checked + .location-finder-switch {
+  background-color: #000;
+}
+
+.location-finder-checkbox:checked + .location-finder-switch::before {
+  transform: translateX(20px);
+}
+
+.location-finder-checkbox:focus-visible + .location-finder-switch {
+  outline: 2px solid var(--brand-navy);
+  outline-offset: 2px;
+}
+
+/* map */
+.location-finder-map {
+  position: relative;
+  height: 35vh;
+  min-height: 280px;
+  background: #e5e3df;
+}
+
+.location-finder-map[hidden] {
+  display: none;
+}
+
+.location-finder-canvas {
+  width: 100%;
+  height: 100%;
+  font-family: var(--body-font-family);
+}
+
+.location-finder-pin.leaflet-div-icon {
+  border: 0;
+  background: none;
+}
+
+.location-finder-pin svg {
+  display: block;
+  width: 24px;
+  height: 32px;
+  filter: drop-shadow(0 1px 1px rgb(0 0 0 / 30%));
+}
+
+.location-finder-pin-pet {
+  color: var(--lf-star);
+}
+
+.location-finder-pin-vet {
+  color: #5f5f5f;
+}
+
+.location-finder-canvas .location-finder-origin {
+  fill: var(--brand-navy);
+  fill-opacity: 1;
+  stroke: #fff;
+  stroke-width: 2;
+}
+
+/* results */
+.location-finder-results {
+  margin-top: 32px;
+}
+
+.location-finder-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.location-finder-spinner:not([hidden]) {
+  display: block;
+  width: 40px;
+  height: 40px;
+  margin: 20px auto;
+  border: 4px solid rgb(0 0 0 / 10%);
+  border-top-color: var(--brand-navy);
+  border-radius: 50%;
+  animation: location-finder-spin 1s linear infinite;
+}
+
+@keyframes location-finder-spin {
+  to { transform: rotate(360deg); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .location-finder-spinner:not([hidden]) {
+    animation-duration: 3s;
+  }
+}
+
+.location-finder-empty {
+  border-radius: 8px;
+  padding: 32px;
+  background-color: var(--lf-chip);
+  text-align: center;
+}
+
+.location-finder-empty h2,
+.location-finder-empty h3 {
+  margin: 0 0 16px;
+  font-size: 20px;
+  font-weight: 500;
+  line-height: 1.3;
+  letter-spacing: -0.4px;
+  color: var(--lf-text);
+  text-align: center;
+}
+
+.location-finder-empty p {
+  margin: 0;
+  font-size: 16px;
+  line-height: 1.3;
+  letter-spacing: -0.16px;
+  color: var(--lf-muted);
+  text-align: center;
+}
+
+/* result card */
+.location-finder-card {
+  position: relative;
+  display: flex;
+  margin: 0 -24px;
+  border-bottom: 1px solid var(--lf-line);
+  padding: 24px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.location-finder-card:hover,
+.location-finder-card.is-selected {
+  background-color: var(--lf-line);
+}
+
+.location-finder-card:focus-visible {
+  outline: 2px solid var(--brand-navy);
+  outline-offset: -2px;
+}
+
+.location-finder-logo {
+  display: flex;
+  flex: 0 0 24px;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  margin-right: 16px;
+  border: 1px solid #eaeaea;
+  border-radius: 50%;
+  background-color: #fff;
+  overflow: hidden;
+}
+
+.location-finder-logo img {
+  max-width: 80%;
+  max-height: 25px;
+  object-fit: contain;
+}
+
+.location-finder-details {
+  position: relative;
+  flex: 1 1 0;
+  min-width: 0;
+}
+
+.location-finder-card-head {
+  max-width: 70%;
+  text-wrap: balance;
+  overflow-wrap: break-word;
+}
+
+.location-finder-card h3 {
+  margin: 0;
+  font-family: var(--body-font-family);
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 1.3;
+  letter-spacing: -0.4px;
+  color: var(--lf-text);
+}
+
+.location-finder-rating {
+  display: flex;
+  align-items: center;
+  margin: 2px 0 0;
+  font-size: 14px;
+  color: var(--lf-text);
+}
+
+.location-finder-stars {
+  display: inline-flex;
+  margin-right: 4px;
+  color: var(--lf-star);
+}
+
+.location-finder-star {
+  position: relative;
+  width: 20px;
+  height: 20px;
+  padding-right: 3px;
+}
+
+.location-finder-star svg {
+  display: block;
+  width: 20px;
+  height: 20px;
+  fill: transparent;
+  stroke: currentcolor;
+  stroke-width: 1.5;
+}
+
+.location-finder-star-full svg {
+  fill: currentcolor;
+}
+
+.location-finder-star .location-finder-star-fill {
+  position: absolute;
+  top: 0;
+  left: 0;
+  fill: currentcolor;
+  clip-path: inset(0 50% 0 0);
+}
+
+.location-finder-contact {
+  margin: 24px 0;
+}
+
+.location-finder-contact p {
+  display: flex;
+  align-items: flex-start;
+  gap: 5px;
+  margin: 0 0 8px;
+  font-size: 14px;
+  line-height: 1.3;
+  color: var(--lf-text);
+}
+
+.location-finder-contact svg {
+  flex: 0 0 18px;
+  width: 18px;
+  height: 18px;
+  fill: var(--lf-grey);
+}
+
+.location-finder-contact a:any-link {
+  color: inherit;
+}
+
+.location-finder-services {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+  margin: 0;
+  padding: 8px 12px 8px 0;
+  list-style: none;
+}
+
+.location-finder-services li {
+  border: 1px solid var(--lf-line);
+  border-radius: 8px;
+  padding: 8px 12px;
+  background: var(--lf-chip);
+  font-size: 12px;
+  line-height: 1.2;
+}
+
+.location-finder-card:hover .location-finder-services li,
+.location-finder-card.is-selected .location-finder-services li {
+  background: #fff;
+}
+
+.location-finder-visit a:any-link {
+  display: inline-flex;
+  align-items: center;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1.3;
+  letter-spacing: -0.28px;
+  color: var(--lf-text);
+  text-decoration: underline;
+}
+
+.location-finder-visit svg {
+  width: 16px;
+  height: 16px;
+  margin-left: 5px;
+  fill: #000;
+}
+
+.location-finder-visit-top {
+  display: none;
+}
+
+.location-finder-visit-bottom {
+  margin-top: 24px;
+  padding-bottom: 10px;
+}
+
+@media (width >= 768px) {
+  .location-finder-intro h1,
+  .location-finder-intro h2 {
+    margin-bottom: 10px;
+    font-size: 40px;
+    letter-spacing: normal;
+  }
+
+  .location-finder-intro p {
+    margin-bottom: 48px;
+    font-size: 18px;
+  }
+
+  .location-finder-field {
+    flex: 0 0 60%;
+  }
+
+  .location-finder-toggle {
+    order: 0;
+  }
+
+  .location-finder-count {
+    flex: 0 0 50%;
+    margin-top: 4px;
+    font-size: 12px;
+  }
+
+  .location-finder-card {
+    margin: 0 0 24px -24px;
+  }
+
+  .location-finder-logo {
+    flex-basis: 48px;
+    width: 48px;
+    height: 48px;
+  }
+
+  .location-finder-card h3 {
+    font-size: 20px;
+  }
+
+  .location-finder-services li {
+    font-size: 14px;
+  }
+
+  .location-finder-visit-top {
+    position: absolute;
+    top: 8px;
+    right: 0;
+    display: block;
+  }
+
+  .location-finder-visit-bottom {
+    display: none;
+  }
+}
+
+/* desktop: search + results on the left, map on the right edge */
+@media (width >= 992px) {
+  .location-finder {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: auto 500px;
+    padding: 0;
+  }
+
+  .location-finder-search {
+    grid-area: 1 / 1;
+    padding: 20px 80px 20px 76px;
+  }
+
+  .location-finder-form {
+    margin-bottom: 0;
+  }
+
+  .location-finder-map {
+    grid-area: 1 / 2 / 3 / 3;
+    height: auto;
+    margin-bottom: 20px;
+  }
+
+  .location-finder-results {
+    grid-area: 2 / 1;
+    margin-top: 0;
+    padding: 0 80px 0 76px;
+    overflow-y: auto;
+  }
+
+  /* map view off: results take the full width as a grid of cards */
+  .location-finder.location-finder-list-view {
+    grid-template-rows: auto auto;
+  }
+
+  .location-finder-list-view .location-finder-results {
+    grid-area: 2 / 1 / 3 / 3;
+    padding-bottom: 40px;
+    overflow: visible;
+  }
+
+  .location-finder-list-view .location-finder-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+    gap: 24px;
+  }
+
+  .location-finder-list-view .location-finder-card {
+    margin: 0;
+  }
+
+  .location-finder-list-view .location-finder-visit-top {
+    display: none;
+  }
+
+  .location-finder-list-view .location-finder-visit-bottom {
+    display: block;
+  }
+}

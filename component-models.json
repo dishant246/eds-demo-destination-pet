@@ -661,6 +661,40 @@
     ]
   },
   {
+    "id": "location-finder",
+    "fields": [
+      {
+        "component": "richtext",
+        "valueType": "string",
+        "name": "text",
+        "value": "",
+        "label": "Intro text"
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "source",
+        "value": "",
+        "label": "Locations data URL (GeoJSON)",
+        "description": "URL of the GeoJSON file listing the centers"
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "placeholder",
+        "value": "",
+        "label": "Search placeholder"
+      },
+      {
+        "component": "richtext",
+        "valueType": "string",
+        "name": "noResults",
+        "value": "",
+        "label": "No results message"
+      }
+    ]
+  },
+  {
     "id": "modal",
     "fields": [
       {

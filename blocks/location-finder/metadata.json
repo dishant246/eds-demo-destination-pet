@@ -1,0 +1,21 @@
+{
+  "variantName": "location-finder",
+  "baseBlock": "location-finder",
+  "canonicalModel": "standalone",
+  "visualCharacteristics": "two columns on desktop: intro h1 + paragraph, location search field and 'Map view' switch with a scrollable results list below; an interactive map of every center flush to the right edge. Stacked on mobile (search, switch, map, results). Result cards: round logo, name, star rating, address, phone, service chips, 'Visit location' link",
+  "contentPattern": "4 field rows: text (h1 + p) | source (GeoJSON URL) | placeholder | noResults (h2 + p)",
+  "sourceContext": {
+    "originUrl": "https://www.destinationpet.com/our-locations/location/",
+    "selector": ".centerlocator"
+  },
+  "implementation": "Leaflet 1.9.4 + OpenStreetMap tiles (no API key); search geocoded with OpenStreetMap Nominatim, results = centers within 100 km, nearest first",
+  "usage": {
+    "pagesUsing": [
+      "https://www.destinationpet.com/our-locations/location/"
+    ],
+    "reuseCount": 1,
+    "lastUsed": "2026-10-07T00:00:00.000Z"
+  },
+  "options": [],
+  "memberVariantIds": []
+}

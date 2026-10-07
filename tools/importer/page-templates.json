@@ -348,8 +348,29 @@
         "https://www.destinationpet.com/our-locations/location/"
       ],
       "coverageGaps": [],
-      "description": "Two-column locator with intro text, search field and map view toggle beside an interactive map, followed by a colored column band",
-      "blocks": []
+      "description": "Two-column locator with intro text, search field and map view toggle beside an interactive map of all centers",
+      "blocks": [
+        {
+          "name": "location-finder",
+          "instances": [
+            ".centerlocator"
+          ]
+        }
+      ],
+      "sections": [
+        {
+          "id": "1",
+          "name": "Locator",
+          "selector": [
+            ".centerlocator"
+          ],
+          "style": null,
+          "blocks": [
+            "location-finder"
+          ],
+          "defaultContent": []
+        }
+      ]
     }
   ]
 }
