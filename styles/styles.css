@@ -25,7 +25,7 @@
 
   /* heading sizes (mobile) */
   --heading-font-size-xxl: 36px;
-  --heading-font-size-xl: 28px;
+  --heading-font-size-xl: 24px;
   --heading-font-size-l: 24px;
   --heading-font-size-m: 20px;
   --heading-font-size-s: 18px;
@@ -75,6 +75,9 @@ body {
   font-family: var(--body-font-family);
   font-size: var(--body-font-size-m);
   line-height: 1.4;
+
+  /* long URLs in copy wrap instead of widening the page (source body rule) */
+  overflow-wrap: break-word;
 }
 
 body.appear {
@@ -286,6 +289,19 @@ main .section.secondary {
   background-color: var(--brand-light-blue);
 }
 
+/* beige bands: 32px padding below 768px, 40px from 768px (source spacing__top-bottom--40px) */
+main > .section.tertiary {
+  padding-top: 32px;
+  padding-bottom: 32px;
+}
+
+@media (width >= 768px) {
+  main > .section.tertiary {
+    padding-top: var(--section-padding);
+    padding-bottom: var(--section-padding);
+  }
+}
+
 /* navy title bands: full-bleed (legal pages); the inset variant spans the content width only
    (our-locations state headings) */
 main .section.primary {
@@ -303,7 +319,7 @@ main .section.primary:not(.inset) {
 }
 
 main .section.primary h1 {
-  margin: 0;
+  margin: 0 0 5px;
   font-size: 32px;
   line-height: 1.2;
   text-align: center;
@@ -330,6 +346,15 @@ main > .section:not(.inset) > .default-content-wrapper {
   padding-bottom: 12px;
 }
 
+/* home "We work together" band: heading and button sit tight against the value cards */
+main > .section.cards-values-container > .default-content-wrapper:first-child {
+  padding-bottom: 0;
+}
+
+main > .section.cards-values-container > .default-content-wrapper:last-child {
+  padding-top: 0;
+}
+
 main > .section > .default-content-wrapper :is(h1, h2, h3, p) {
   text-align: center;
 }
@@ -341,10 +366,17 @@ main > .section > .default-content-wrapper h1 {
 }
 
 main > .section > .default-content-wrapper h1 + p {
-  margin-top: 10px;
+  margin-top: 5px;
   font-size: 20px;
   font-weight: 600;
   line-height: 28px;
+}
+
+@media (width >= 768px) {
+  /* source margin__top--small: 5px below 768px, 10px from 768px */
+  main > .section > .default-content-wrapper h1 + p {
+    margin-top: 10px;
+  }
 }
 
 @media (width >= 900px) {
@@ -361,6 +393,7 @@ main > .section.legal-text {
 
 main > .section.legal-text > .default-content-wrapper p {
   margin: 0 0 42.4px;
+  letter-spacing: -0.16px;
   text-align: left;
 }
 
@@ -393,7 +426,19 @@ main > .section.legal-text > .default-content-wrapper h2 {
 }
 
 /* html-sitemap: left-aligned bold title over nested link lists (square bullets, 40px indent,
-   30px top-level links, 18px teal sub-level links, 46px rhythm) */
+   30px top-level links, 18px teal sub-level links, 46px rhythm). The source sitemap container
+   has a flat 8px padding on mobile; on desktop a 12px column inset 8px more */
+main > .section.sitemap > .default-content-wrapper:only-child {
+  padding: 8px;
+}
+
+@media (width >= 900px) {
+  main > .section.sitemap > .default-content-wrapper:only-child {
+    max-width: calc(var(--content-max-width) - 16px);
+    padding: 12px 32px;
+  }
+}
+
 main > .section.sitemap > .default-content-wrapper h1 {
   margin: 20px 0;
   color: var(--text-color);
@@ -411,6 +456,12 @@ main > .section.sitemap > .default-content-wrapper ul {
   list-style: square;
 }
 
+/* the source underlines the whole list: a thin text-colour line under every link */
+main > .section.sitemap > .default-content-wrapper > ul {
+  color: var(--text-color);
+  text-decoration: underline;
+}
+
 main > .section.sitemap > .default-content-wrapper li {
   margin: 20px 0;
   color: var(--text-color);
@@ -425,7 +476,7 @@ main > .section.sitemap > .default-content-wrapper li a:any-link {
   font-size: 30px;
   line-height: 26px;
   color: var(--text-color);
-  text-decoration: underline;
+  text-decoration: none;
 }
 
 main > .section.sitemap > .default-content-wrapper li li a:any-link {
@@ -433,8 +484,14 @@ main > .section.sitemap > .default-content-wrapper li li a:any-link {
   color: #00adc2;
 }
 
+/* hover: the link's own underline appears (same colour) */
 main > .section.sitemap > .default-content-wrapper li a:any-link:hover {
-  color: var(--link-hover-color);
+  color: var(--text-color);
+  text-decoration: underline;
+}
+
+main > .section.sitemap > .default-content-wrapper li li a:any-link:hover {
+  color: #00adc2;
 }
 
 /* the hero sits flush against the next section */
@@ -446,6 +503,11 @@ main > .section:has(> .hero-banner-wrapper:last-child) {
 main > .section > .default-content-wrapper .button-container {
   margin-bottom: 0;
   text-align: center;
+}
+
+/* home "We work together": the button sits right under the value cards */
+main > .section.cards-values-container > .default-content-wrapper:last-child .button-container {
+  margin-top: 0;
 }
 
 /* sections of default content only: 32px padding on mobile, 40px on desktop
@@ -495,4 +557,25 @@ main > .section:not(.tertiary, .secondary, .primary):has(> .default-content-wrap
   main > .section:not(.tertiary, .secondary, .primary):has(> .default-content-wrapper:only-child > .button-container:only-child) {
     padding-bottom: 28px;
   }
+}
+
+/* home "Sell your business" cards-promo band. Mobile: the source stacks an empty 24px column and
+   a 12px column inset above the card, and an empty 24px column below it. Desktop (source
+   spacing__top--40px + 12px column): only the column's 12px below */
+main > .section.cards-promo-container {
+  padding-top: 76px;
+  padding-bottom: 36px;
+}
+
+@media (width >= 900px) {
+  main > .section.cards-promo-container {
+    padding-top: calc(var(--section-padding) + 12px);
+    padding-bottom: 12px;
+  }
+}
+
+/* html-sitemap: no section padding */
+main > .section.sitemap:not(.inset):has(> .default-content-wrapper:only-child) {
+  padding-top: 0;
+  padding-bottom: 0;
 }
