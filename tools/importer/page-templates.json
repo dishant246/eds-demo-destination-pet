@@ -188,7 +188,8 @@
       ],
       "coverageGaps": [],
       "description": "Section hub page with only global header and footer and no body content",
-      "blocks": []
+      "blocks": [],
+      "sections": []
     },
     {
       "name": "legal-text-page",
@@ -322,7 +323,8 @@
       ],
       "coverageGaps": [],
       "description": "Nested subsection hub page with only global header and footer and no body content",
-      "blocks": []
+      "blocks": [],
+      "sections": []
     },
     {
       "name": "html-sitemap",
@@ -331,7 +333,22 @@
       ],
       "coverageGaps": [],
       "description": "Hierarchical link listing with grouped subheadings and nested lists of page links",
-      "blocks": []
+      "blocks": [],
+      "sections": [
+        {
+          "id": "1",
+          "name": "Sitemap",
+          "selector": [
+            ".htmlsitemap"
+          ],
+          "style": "sitemap",
+          "blocks": [],
+          "defaultContent": [
+            "h1.sitemap__heading",
+            "ul.sitemap__subheading"
+          ]
+        }
+      ]
     },
     {
       "name": "empty-top-level-hub",
@@ -340,7 +357,8 @@
       ],
       "coverageGaps": [],
       "description": "Top-level hub page with only global header and footer and no body content",
-      "blocks": []
+      "blocks": [],
+      "sections": []
     },
     {
       "name": "location-finder",

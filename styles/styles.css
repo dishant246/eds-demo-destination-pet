@@ -392,6 +392,51 @@ main > .section.legal-text > .default-content-wrapper h2 {
   }
 }
 
+/* html-sitemap: left-aligned bold title over nested link lists (square bullets, 40px indent,
+   30px top-level links, 18px teal sub-level links, 46px rhythm) */
+main > .section.sitemap > .default-content-wrapper h1 {
+  margin: 20px 0;
+  color: var(--text-color);
+  font-size: 40px;
+  font-weight: 800;
+  line-height: 1.17;
+  text-align: left;
+}
+
+main > .section.sitemap > .default-content-wrapper ul {
+  margin: 20px 0;
+  padding-left: 40px;
+  font-size: 10px;
+  line-height: 1.5;
+  list-style: square;
+}
+
+main > .section.sitemap > .default-content-wrapper li {
+  margin: 20px 0;
+  color: var(--text-color);
+}
+
+main > .section.sitemap > .default-content-wrapper li > p:first-child {
+  margin: 0;
+  text-align: left;
+}
+
+main > .section.sitemap > .default-content-wrapper li a:any-link {
+  font-size: 30px;
+  line-height: 26px;
+  color: var(--text-color);
+  text-decoration: underline;
+}
+
+main > .section.sitemap > .default-content-wrapper li li a:any-link {
+  font-size: 18px;
+  color: #00adc2;
+}
+
+main > .section.sitemap > .default-content-wrapper li a:any-link:hover {
+  color: var(--link-hover-color);
+}
+
 /* the hero sits flush against the next section */
 main > .section:has(> .hero-banner-wrapper:last-child) {
   padding-bottom: 0;

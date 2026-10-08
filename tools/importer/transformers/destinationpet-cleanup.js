@@ -144,6 +144,8 @@ function relativizeSiteLinks(element) {
     if (ASSET_PATH_RE.test(pathOnly)) return;
     a.setAttribute('href', rest);
   });
+  // /home only 302-redirects to the site root (html-sitemap "Home" entry); the EDS home page is /
+  element.querySelectorAll('a[href="/home"], a[href="/home/"]').forEach((a) => a.setAttribute('href', '/'));
 }
 
 // google.com/maps place links carry tracking params (sa, ved, entry) -> drop the query.

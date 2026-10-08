@@ -344,6 +344,11 @@ function a11yLinks(main) {
 export function decorateMain(main) {
   // hopefully forward compatible button decoration
   decorateButtons(main);
+  // links in list items (html-sitemap) are plain links, never buttons
+  main.querySelectorAll('li > .button-container').forEach((p) => {
+    p.classList.remove('button-container');
+    p.querySelectorAll('a.button').forEach((a) => a.classList.remove('button', 'primary', 'secondary'));
+  });
   decorateIcons(main);
   buildAutoBlocks(main);
   decorateSections(main);
@@ -367,7 +372,9 @@ async function loadEager(doc) {
   if (main) {
     decorateMain(main);
     document.body.classList.add('appear');
-    await loadSection(main.querySelector('.section'), waitForFirstImage);
+    // hub pages can have no body content at all - still load header, footer and fonts
+    const firstSection = main.querySelector('.section');
+    if (firstSection) await loadSection(firstSection, waitForFirstImage);
   }
 
   try {

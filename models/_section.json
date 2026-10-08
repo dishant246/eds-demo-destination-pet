@@ -57,6 +57,10 @@
             {
               "name": "Legal text (left aligned)",
               "value": "legal-text"
+            },
+            {
+              "name": "Sitemap (nested link list)",
+              "value": "sitemap"
             }
           ]
         }
