@@ -772,6 +772,7 @@ var CustomImportScript = (() => {
       if (ASSET_PATH_RE.test(pathOnly)) return;
       a.setAttribute("href", rest);
     });
+    element.querySelectorAll('a[href="/home"], a[href="/home/"]').forEach((a) => a.setAttribute("href", "/"));
   }
   function stripMapsTracking(element) {
     element.querySelectorAll('a[href*="google.com/maps"]').forEach((a) => {
@@ -824,14 +825,43 @@ var CustomImportScript = (() => {
   function isHr(el) {
     return !!el && el.tagName === "HR";
   }
-  function collectEntries(element, sections) {
+  var INTRO_CLASS_STYLES = [
+    ["subhead-1", "intro-large"],
+    ["subhead-2", "intro-bold"],
+    ["subhead-3", "intro-bold"],
+    ["color--primary", "intro-navy"],
+    ["margin__top--small", "intro-space-above-small"],
+    ["margin__top--medium", "intro-space-above-medium"],
+    ["margin__bottom--medium", "intro-space-below-medium"]
+  ];
+  function introStyles(el, blockEls) {
+    const richtext = [...el.querySelectorAll(".richtext")].find((rt) => rt.textContent.trim() && !blockEls.some((b) => b.contains(rt)));
+    if (!richtext) return [];
+    return INTRO_CLASS_STYLES.filter(([cls]) => richtext.classList.contains(cls)).map(([, s]) => s);
+  }
+  function withIntro(style, el, blockEls) {
+    if (style && style.includes("legal-text")) return style;
+    const all = [style, ...introStyles(el, blockEls)].filter(Boolean);
+    return all.length ? all.join(", ") : null;
+  }
+  function blockElements(element, blocks) {
+    return blocks.flatMap((b) => (b.instances || []).flatMap((sel) => {
+      try {
+        return [...element.querySelectorAll(sel)];
+      } catch (e) {
+        return [];
+      }
+    }));
+  }
+  function collectEntries(element, sections, blocks) {
     const entries = [];
     const handled = [];
+    const blockEls = blockElements(element, blocks);
     sections.forEach((section) => {
       const el = querySection(element, section.selector);
       if (!el || handled.includes(el)) return;
       handled.push(el);
-      entries.push({ el, top: el, style: section.style || styleFor(el) });
+      entries.push({ el, top: el, style: withIntro(section.style || styleFor(el), el, blockEls) });
     });
     element.querySelectorAll(MAIN_GRID).forEach((grid) => {
       [...grid.children].forEach((top) => {
@@ -839,7 +869,7 @@ var CustomImportScript = (() => {
         if (handled.some((h) => h === top || h.contains(top) || top.contains(h))) return;
         const topStyle = styleFor(top);
         if (topStyle) {
-          entries.push({ el: top, top, style: topStyle });
+          entries.push({ el: top, top, style: withIntro(topStyle, top, blockEls) });
           return;
         }
         const firstCol = top.querySelector(".container__column");
@@ -848,7 +878,7 @@ var CustomImportScript = (() => {
           entries.push({ el: band, top, style: `${styleFor(band)}, inset` });
           return;
         }
-        entries.push({ el: top, top, style: null });
+        entries.push({ el: top, top, style: withIntro(null, top, blockEls) });
       });
     });
     entries.sort((a, b) => a.el.compareDocumentPosition(b.el) & 4 ? -1 : 1);
@@ -890,7 +920,8 @@ var CustomImportScript = (() => {
     const sections = payload && payload.template && payload.template.sections || [];
     const doc = element.ownerDocument;
     if (hookName === "beforeTransform") {
-      const entries = collectEntries(element, sections);
+      const blocks = payload && payload.template && payload.template.blocks || [];
+      const entries = collectEntries(element, sections, blocks);
       for (let i = entries.length - 1; i >= 0; i -= 1) {
         const entry = entries[i];
         const { el, top, style } = entry;

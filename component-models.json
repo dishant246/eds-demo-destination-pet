@@ -164,6 +164,30 @@
           {
             "name": "Sitemap (nested link list)",
             "value": "sitemap"
+          },
+          {
+            "name": "Intro: bold text",
+            "value": "intro-bold"
+          },
+          {
+            "name": "Intro: large bold text",
+            "value": "intro-large"
+          },
+          {
+            "name": "Intro: navy text",
+            "value": "intro-navy"
+          },
+          {
+            "name": "Intro: small space above",
+            "value": "intro-space-above-small"
+          },
+          {
+            "name": "Intro: medium space above",
+            "value": "intro-space-above-medium"
+          },
+          {
+            "name": "Intro: medium space below",
+            "value": "intro-space-below-medium"
           }
         ]
       }
