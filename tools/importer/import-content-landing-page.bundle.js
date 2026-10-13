@@ -234,12 +234,28 @@ var CustomImportScript = (() => {
   }
   var ATTRIBUTION_RE = /^\s*[-–—~]/;
   function parse5(element, { document }) {
+    const left = element.matches('[class*="testimonial-background-transparent"]') || !!element.querySelector('[class*="testimonial-background-transparent"]');
+    const headerNodes = [];
+    const headerName = element.querySelector(".testimonial__header-name");
+    const headerAddress = element.querySelector(".testimonial__header-address");
+    if (headerName && headerName.textContent.trim()) {
+      const p = document.createElement("p");
+      const strong = document.createElement("strong");
+      strong.textContent = headerName.textContent.trim();
+      p.appendChild(strong);
+      headerNodes.push(p);
+    }
+    if (headerAddress && headerAddress.textContent.trim()) {
+      const p = document.createElement("p");
+      p.textContent = headerAddress.textContent.trim();
+      headerNodes.push(p);
+    }
     element.querySelectorAll('.testimonial__header, [class*="testimonial__upper-quotes"], [class*="testimonial__lower-quotes"]').forEach((el) => el.remove());
     const desc = element.querySelector(".testimonial__description") || element;
     const paragraphs = [...desc.querySelectorAll("p")].filter((p) => p.textContent.trim() !== "");
-    let attribution = null;
-    if (paragraphs.length > 1 && ATTRIBUTION_RE.test(paragraphs[paragraphs.length - 1].textContent)) {
-      attribution = paragraphs.pop();
+    let attribution = headerNodes.length ? headerNodes : null;
+    if (!attribution && paragraphs.length > 1 && ATTRIBUTION_RE.test(paragraphs[paragraphs.length - 1].textContent)) {
+      attribution = [paragraphs.pop()];
     }
     if (!paragraphs.length && !attribution) {
       element.replaceWith(...element.childNodes);
@@ -247,8 +263,9 @@ var CustomImportScript = (() => {
     }
     const cells = [];
     cells.push([paragraphs.length ? hint4(document, "quotation", paragraphs) : ""]);
-    cells.push([attribution ? hint4(document, "attribution", [attribution]) : ""]);
-    const block = WebImporter.Blocks.createBlock(document, { name: "quote-testimonial", cells });
+    cells.push([attribution ? hint4(document, "attribution", attribution) : ""]);
+    const name = left ? "quote-testimonial (left)" : "quote-testimonial";
+    const block = WebImporter.Blocks.createBlock(document, { name, cells });
     element.replaceWith(block);
   }
 
@@ -839,9 +856,14 @@ var CustomImportScript = (() => {
     if (!richtext) return [];
     return INTRO_CLASS_STYLES.filter(([cls]) => richtext.classList.contains(cls)).map(([, s]) => s);
   }
+  var FLUSH_CANDIDATES = ".columncontainer, .title, .text, .richtext, .rawhtml";
+  function isFlush(el) {
+    return el.matches(FLUSH_CANDIDATES) && ![...el.classList].some((c) => c.startsWith("spacing__"));
+  }
   function withIntro(style, el, blockEls) {
     if (style && style.includes("legal-text")) return style;
     const all = [style, ...introStyles(el, blockEls)].filter(Boolean);
+    if (isFlush(el)) all.push("flush");
     return all.length ? all.join(", ") : null;
   }
   function blockElements(element, blocks) {

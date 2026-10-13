@@ -21,6 +21,19 @@
       "id": "quote-testimonial",
       "fields": [
         {
+          "component": "multiselect",
+          "name": "classes",
+          "value": "",
+          "label": "Style",
+          "valueType": "string",
+          "options": [
+            {
+              "name": "Left aligned, attribution on top (left)",
+              "value": "left"
+            }
+          ]
+        },
+        {
           "component": "richtext",
           "valueType": "string",
           "name": "quotation",

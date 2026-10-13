@@ -96,3 +96,47 @@
 .quote-testimonial .quote-testimonial-attribution cite {
   font-style: normal;
 }
+
+/*
+ * left variant (source .testimonial-background-transparent, e.g. live-webinar):
+ * transparent card, left-aligned text and the attribution (.testimonial__header)
+ * above the upper mark. Flex column + order moves the figcaption first; the
+ * ::before mark keeps its 16px top margin as the header's margin-bottom.
+ * 36px top = 24px card padding + 12px .container__column padding.
+ */
+.quote-testimonial.left .quote-testimonial-figure {
+  display: flex;
+  flex-direction: column;
+  padding-top: 36px;
+}
+
+.quote-testimonial.left .quote-testimonial-attribution {
+  order: -1;
+}
+
+/* lower mark: 4px line-box remainder + the 12px bottom padding of the source .container__column */
+.quote-testimonial.left .quote-testimonial-figure::after {
+  margin-bottom: 16px;
+}
+
+.quote-testimonial.left .quote-testimonial-quotation p {
+  text-align: left;
+}
+
+/* flex items do not collapse margins: the 16px mark margin already spaces the last paragraph */
+.quote-testimonial.left .quote-testimonial-quotation > :last-child {
+  margin-bottom: 0;
+}
+
+/* header name + address (source .testimonial__header-name / -address: 16px/700, 20.8px) */
+.quote-testimonial.left .quote-testimonial-attribution p {
+  margin: 0;
+  font-weight: 700;
+  line-height: 20.8px;
+  letter-spacing: normal;
+  text-align: left;
+}
+
+.quote-testimonial.left .quote-testimonial-attribution p:first-child {
+  letter-spacing: -0.16px;
+}

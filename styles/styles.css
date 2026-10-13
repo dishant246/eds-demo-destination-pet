@@ -256,10 +256,16 @@ main img {
   width: 100%;
 }
 
-/* sections */
+/* sections: 32px vertical padding below 768px, 40px from 768px (source spacing__top-bottom--40px) */
 main > .section {
   margin: 0;
-  padding: var(--section-padding) 0;
+  padding: 32px 0;
+}
+
+@media (width >= 768px) {
+  main > .section {
+    padding: var(--section-padding) 0;
+  }
 }
 
 main > .section > div {
@@ -287,19 +293,6 @@ main .section.tertiary {
 
 main .section.secondary {
   background-color: var(--brand-light-blue);
-}
-
-/* beige bands: 32px padding below 768px, 40px from 768px (source spacing__top-bottom--40px) */
-main > .section.tertiary {
-  padding-top: 32px;
-  padding-bottom: 32px;
-}
-
-@media (width >= 768px) {
-  main > .section.tertiary {
-    padding-top: var(--section-padding);
-    padding-bottom: var(--section-padding);
-  }
 }
 
 /* navy title bands: full-bleed (legal pages); the inset variant spans the content width only
@@ -635,6 +628,14 @@ main > .section.cards-promo-container {
 
 /* html-sitemap: no section padding */
 main > .section.sitemap:not(.inset):has(> .default-content-wrapper:only-child) {
+  padding-top: 0;
+  padding-bottom: 0;
+}
+
+/* flush: source sections without a spacing class (column bands, titles, form embeds) have no
+   vertical padding */
+main > .section.flush,
+main > .section.flush:not(.inset):has(> .default-content-wrapper:only-child) {
   padding-top: 0;
   padding-bottom: 0;
 }

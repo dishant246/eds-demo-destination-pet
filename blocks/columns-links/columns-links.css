@@ -1,9 +1,11 @@
 /* columns-links: equal-width columns of centred buttons or compact link lists
-   (source: .columncontainer > .row.container__layout-section, 12px column gutters) */
+   (source: .columncontainer > .row.container__layout-section, 12px column gutters; every
+   column has a 12px inset, so stacked columns sit 24px apart inside a 12px band inset) */
 .columns-links .columns-links-row {
   display: flex;
   flex-direction: column;
   gap: 24px;
+  padding: 12px 0;
 }
 
 .columns-links .columns-links-row + .columns-links-row {
@@ -65,26 +67,24 @@
   margin: 0;
 }
 
-@media (width >= 600px) {
-  .columns-links.columns-links-4-cols .columns-links-row {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
+/* link index: nested 24px-inset container on the source (1232px wide on desktop) with a 24px
+   top spacer, inside the outer 12px-inset column; the preceding default-content button
+   already contributes 12px of the top spacer */
+.columns-links:has(.columns-links-list) {
+  padding: 12px 24px;
 }
 
-@media (width >= 900px) {
-  .columns-links .columns-links-row,
-  .columns-links.columns-links-4-cols .columns-links-row {
-    display: flex;
-    flex-direction: row;
-    align-items: flex-start;
-    padding: 12px 0;
+/* source col-md-6: two columns per line from 768px (an odd last column is centred); the
+   source content edge sits 24px from the viewport here vs the section's 16px */
+@media (width >= 768px) {
+  .columns-links .columns-links-row {
+    flex-flow: row wrap;
+    justify-content: center;
+    padding: 12px 8px;
   }
 
-  /* link index: nested 24px-inset container on the source (1232px wide) with a 24px top
-     spacer; the preceding default-content button already contributes 12px of it */
-  .columns-links:has(.columns-links-list) {
-    padding: 12px 24px 0;
+  .columns-links .columns-links-col {
+    flex: 0 0 calc((100% - 24px) / 2);
   }
 
   /* two buttons hug the centre line (source button__right | button__left) */
@@ -94,5 +94,17 @@
 
   .columns-links.columns-links-2-cols .columns-links-single:last-child {
     text-align: left;
+  }
+}
+
+@media (width >= 900px) {
+  .columns-links .columns-links-row {
+    flex-wrap: nowrap;
+    align-items: flex-start;
+    padding: 12px 0;
+  }
+
+  .columns-links .columns-links-col {
+    flex: 1 1 0;
   }
 }

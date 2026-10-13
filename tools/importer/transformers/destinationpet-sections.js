@@ -99,9 +99,19 @@ function introStyles(el, blockEls) {
   return INTRO_CLASS_STYLES.filter(([cls]) => richtext.classList.contains(cls)).map(([, s]) => s);
 }
 
+// Top-level column containers, titles, rich texts and raw HTML embeds without a spacing__* class
+// have no vertical padding on the source (only spacing__top-bottom--40px adds 32|40px): 'flush'.
+// Hero teasers, images and media-info blocks carry their own spacing and are left alone.
+const FLUSH_CANDIDATES = '.columncontainer, .title, .text, .richtext, .rawhtml';
+
+function isFlush(el) {
+  return el.matches(FLUSH_CANDIDATES) && ![...el.classList].some((c) => c.startsWith('spacing__'));
+}
+
 function withIntro(style, el, blockEls) {
   if (style && style.includes('legal-text')) return style;
   const all = [style, ...introStyles(el, blockEls)].filter(Boolean);
+  if (isFlush(el)) all.push('flush');
   return all.length ? all.join(', ') : null;
 }
 

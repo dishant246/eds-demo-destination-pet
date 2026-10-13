@@ -281,9 +281,14 @@ var CustomImportScript = (() => {
     if (!richtext) return [];
     return INTRO_CLASS_STYLES.filter(([cls]) => richtext.classList.contains(cls)).map(([, s]) => s);
   }
+  var FLUSH_CANDIDATES = ".columncontainer, .title, .text, .richtext, .rawhtml";
+  function isFlush(el) {
+    return el.matches(FLUSH_CANDIDATES) && ![...el.classList].some((c) => c.startsWith("spacing__"));
+  }
   function withIntro(style, el, blockEls) {
     if (style && style.includes("legal-text")) return style;
     const all = [style, ...introStyles(el, blockEls)].filter(Boolean);
+    if (isFlush(el)) all.push("flush");
     return all.length ? all.join(", ") : null;
   }
   function blockElements(element, blocks) {

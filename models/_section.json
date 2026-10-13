@@ -85,6 +85,10 @@
             {
               "name": "Intro: medium space below",
               "value": "intro-space-below-medium"
+            },
+            {
+              "name": "No vertical padding (flush)",
+              "value": "flush"
             }
           ]
         }
