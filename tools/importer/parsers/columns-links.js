@@ -82,6 +82,8 @@ export default function parse(element, { document }) {
   }
 
   const cells = [cellsRow];
-  const block = WebImporter.Blocks.createBlock(document, { name: 'columns-links', cells });
+  // the "links" style survives the xwalk columns conversion (which drops the block name), so
+  // Universal Editor can still render this columns block as columns-links (scripts.js maps it back)
+  const block = WebImporter.Blocks.createBlock(document, { name: 'columns-links (links)', cells });
   element.replaceWith(block);
 }

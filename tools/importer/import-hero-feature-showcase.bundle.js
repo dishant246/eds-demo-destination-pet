@@ -122,7 +122,7 @@ var CustomImportScript = (() => {
       return;
     }
     const cells = [[slides.length ? slides : "", text.length ? text : ""]];
-    const block = WebImporter.Blocks.createBlock(document, { name: "columns-slider", cells });
+    const block = WebImporter.Blocks.createBlock(document, { name: "columns-slider (slider)", cells });
     element.replaceWith(block);
   }
 

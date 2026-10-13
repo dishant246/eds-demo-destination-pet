@@ -55,7 +55,9 @@ export default function parse(element, { document }) {
   const cells = [row];
   // source .media-info--right flips the columns on desktop
   const reversed = element.matches('.media-info--right') || !!element.querySelector(':scope .media-info--right');
-  const name = reversed ? 'columns-media (reverse)' : 'columns-media';
+  // the "media" style survives the xwalk columns conversion (which drops the block name), so
+  // Universal Editor can still render this columns block as columns-media (scripts.js maps it back)
+  const name = reversed ? 'columns-media (media, reverse)' : 'columns-media (media)';
   const block = WebImporter.Blocks.createBlock(document, { name, cells });
   element.replaceWith(block);
 }

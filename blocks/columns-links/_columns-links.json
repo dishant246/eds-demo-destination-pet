@@ -9,7 +9,8 @@
             "resourceType": "core/franklin/components/columns/v1/columns",
             "template": {
               "columns": "2",
-              "rows": "1"
+              "rows": "1",
+              "classes": "links"
             }
           }
         }
@@ -20,6 +21,20 @@
     {
       "id": "columns-links",
       "fields": [
+        {
+          "component": "multiselect",
+          "name": "classes",
+          "multi": true,
+          "value": "",
+          "label": "Style",
+          "valueType": "string",
+          "options": [
+            {
+              "name": "Link buttons (links)",
+              "value": "links"
+            }
+          ]
+        },
         {
           "component": "text",
           "valueType": "number",

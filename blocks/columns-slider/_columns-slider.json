@@ -9,7 +9,8 @@
             "resourceType": "core/franklin/components/columns/v1/columns",
             "template": {
               "columns": "2",
-              "rows": "1"
+              "rows": "1",
+              "classes": "slider"
             }
           }
         }
@@ -20,6 +21,20 @@
     {
       "id": "columns-slider",
       "fields": [
+        {
+          "component": "multiselect",
+          "name": "classes",
+          "multi": true,
+          "value": "",
+          "label": "Style",
+          "valueType": "string",
+          "options": [
+            {
+              "name": "Image slider (slider)",
+              "value": "slider"
+            }
+          ]
+        },
         {
           "component": "text",
           "valueType": "number",

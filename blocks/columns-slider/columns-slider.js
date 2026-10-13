@@ -128,10 +128,12 @@ function buildSlider(col, id) {
     slide.setAttribute('aria-roledescription', 'slide');
     slide.setAttribute('aria-label', `${i + 1} of ${pictures.length}`);
 
-    // keep UE instrumentation from the authored wrapper (p) or the picture itself
+    // keep UE instrumentation from the authored wrapper (p) or the picture itself (Dynamic Media
+    // images are rebuilt from image links and carry the link's instrumentation on the picture)
     const wrapper = picture.parentElement !== col && picture.parentElement.tagName === 'P'
       ? picture.parentElement : null;
     if (wrapper) moveInstrumentation(wrapper, slide);
+    moveInstrumentation(picture, slide);
 
     const img = picture.querySelector('img');
     let media = picture;

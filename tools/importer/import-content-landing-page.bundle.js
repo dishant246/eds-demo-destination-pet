@@ -122,7 +122,7 @@ var CustomImportScript = (() => {
     }
     const cells = [row];
     const reversed = element.matches(".media-info--right") || !!element.querySelector(":scope .media-info--right");
-    const name = reversed ? "columns-media (reverse)" : "columns-media";
+    const name = reversed ? "columns-media (media, reverse)" : "columns-media (media)";
     const block = WebImporter.Blocks.createBlock(document, { name, cells });
     element.replaceWith(block);
   }
@@ -697,7 +697,7 @@ var CustomImportScript = (() => {
       return;
     }
     const cells = [cellsRow];
-    const block = WebImporter.Blocks.createBlock(document, { name: "columns-links", cells });
+    const block = WebImporter.Blocks.createBlock(document, { name: "columns-links (links)", cells });
     element.replaceWith(block);
   }
 

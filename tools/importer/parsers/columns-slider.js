@@ -60,6 +60,8 @@ export default function parse(element, { document }) {
   }
 
   const cells = [[slides.length ? slides : '', text.length ? text : '']];
-  const block = WebImporter.Blocks.createBlock(document, { name: 'columns-slider', cells });
+  // the "slider" style survives the xwalk columns conversion (which drops the block name), so
+  // Universal Editor can still render this columns block as the slider (scripts.js maps it back)
+  const block = WebImporter.Blocks.createBlock(document, { name: 'columns-slider (slider)', cells });
   element.replaceWith(block);
 }

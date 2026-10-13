@@ -10,7 +10,7 @@ import {
   loadSections,
 } from './aem.js';
 import { decorateRichtext } from './editor-support-rte.js';
-import { decorateMain } from './scripts.js';
+import { decorateMain, decorateEditorContent } from './scripts.js';
 
 function getState(block) {
   if (block.matches('.accordion')) {
@@ -93,6 +93,8 @@ async function applyChanges(event) {
         block.insertAdjacentElement('afterend', newBlock);
         decorateButtons(newBlock);
         decorateIcons(newBlock);
+        // column block variants + Dynamic Media images, as decorateMain() does on page load
+        decorateEditorContent(newBlock);
         decorateBlock(newBlock);
         decorateRichtext(newBlock);
         await loadBlock(newBlock);
@@ -112,6 +114,7 @@ async function applyChanges(event) {
           element.insertAdjacentElement('afterend', newSection);
           decorateButtons(newSection);
           decorateIcons(newSection);
+          decorateEditorContent(newSection);
           decorateRichtext(newSection);
           decorateSections(parentElement);
           decorateBlocks(parentElement);
@@ -122,6 +125,7 @@ async function applyChanges(event) {
           element.replaceWith(...newElements);
           decorateButtons(parentElement);
           decorateIcons(parentElement);
+          decorateEditorContent(parentElement);
           decorateRichtext(parentElement);
         }
         return true;

@@ -479,6 +479,20 @@
     "id": "columns-links",
     "fields": [
       {
+        "component": "multiselect",
+        "name": "classes",
+        "multi": true,
+        "value": "",
+        "label": "Style",
+        "valueType": "string",
+        "options": [
+          {
+            "name": "Link buttons (links)",
+            "value": "links"
+          }
+        ]
+      },
+      {
         "component": "text",
         "valueType": "number",
         "name": "columns",
@@ -500,10 +514,15 @@
       {
         "component": "multiselect",
         "name": "classes",
+        "multi": true,
         "value": "",
         "label": "Style",
         "valueType": "string",
         "options": [
+          {
+            "name": "Media and text (media)",
+            "value": "media"
+          },
           {
             "name": "Image on the other side (reverse)",
             "value": "reverse"
@@ -530,6 +549,20 @@
     "id": "columns-slider",
     "fields": [
       {
+        "component": "multiselect",
+        "name": "classes",
+        "multi": true,
+        "value": "",
+        "label": "Style",
+        "valueType": "string",
+        "options": [
+          {
+            "name": "Image slider (slider)",
+            "value": "slider"
+          }
+        ]
+      },
+      {
         "component": "text",
         "valueType": "number",
         "name": "columns",
@@ -548,6 +581,32 @@
   {
     "id": "columns",
     "fields": [
+      {
+        "component": "multiselect",
+        "name": "classes",
+        "multi": true,
+        "value": "",
+        "label": "Style",
+        "valueType": "string",
+        "options": [
+          {
+            "name": "Image slider (slider)",
+            "value": "slider"
+          },
+          {
+            "name": "Media and text (media)",
+            "value": "media"
+          },
+          {
+            "name": "Image on the other side (reverse)",
+            "value": "reverse"
+          },
+          {
+            "name": "Link buttons (links)",
+            "value": "links"
+          }
+        ]
+      },
       {
         "component": "text",
         "valueType": "number",

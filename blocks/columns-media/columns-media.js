@@ -21,6 +21,8 @@ export default function decorate(block) {
         col.querySelectorAll('picture > img').forEach((img) => {
           const optimized = createOptimizedPicture(img.src, img.alt, false, [{ width: '900' }]);
           moveInstrumentation(img, optimized.querySelector('img'));
+          // Dynamic Media pictures carry their image link's UE instrumentation on the picture
+          moveInstrumentation(img.closest('picture'), optimized);
           img.closest('picture').replaceWith(optimized);
         });
       } else {

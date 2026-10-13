@@ -13,6 +13,40 @@ import {
   loadCSS,
 } from './aem.js';
 
+/**
+ * Moves all the attributes from a given elmenet to another given element.
+ * @param {Element} from the element to copy attributes from
+ * @param {Element} to the element to copy attributes to
+ */
+export function moveAttributes(from, to, attributes) {
+  if (!attributes) {
+    // eslint-disable-next-line no-param-reassign
+    attributes = [...from.attributes].map(({ nodeName }) => nodeName);
+  }
+  attributes.forEach((attr) => {
+    const value = from.getAttribute(attr);
+    if (value) {
+      to?.setAttribute(attr, value);
+      from.removeAttribute(attr);
+    }
+  });
+}
+
+/**
+ * Move instrumentation attributes from a given element to another given element.
+ * @param {Element} from the element to copy attributes from
+ * @param {Element} to the element to copy attributes to
+ */
+export function moveInstrumentation(from, to) {
+  moveAttributes(
+    from,
+    to,
+    [...from.attributes]
+      .map(({ nodeName }) => nodeName)
+      .filter((attr) => attr.startsWith('data-aue-') || attr.startsWith('data-richtext-')),
+  );
+}
+
 // --- BEGIN DM/Scene7 auto-block (excat-generated) ---
 
 const DM_BREAKPOINTS = [
@@ -207,7 +241,10 @@ function buildDynamicMediaImages(main) {
     // NEVER unwrap <div> — those are block-content cells (cards,
     // carousel, columns); unwrapping them collapses the block's row
     // structure and decorators can't find their image cells.
+    // keep Universal Editor instrumentation (on the link or its wrapper) on the picture
+    moveInstrumentation(a, picture);
     if (isUnwrappableMarkdownParagraph(a)) {
+      moveInstrumentation(a.parentElement, picture);
       a.parentElement.replaceWith(picture);
     } else {
       a.replaceWith(picture);
@@ -236,40 +273,6 @@ window.__dmRender__ = (src, alt) => {
 };
 
 // --- END DM/Scene7 auto-block ---
-
-/**
- * Moves all the attributes from a given elmenet to another given element.
- * @param {Element} from the element to copy attributes from
- * @param {Element} to the element to copy attributes to
- */
-export function moveAttributes(from, to, attributes) {
-  if (!attributes) {
-    // eslint-disable-next-line no-param-reassign
-    attributes = [...from.attributes].map(({ nodeName }) => nodeName);
-  }
-  attributes.forEach((attr) => {
-    const value = from.getAttribute(attr);
-    if (value) {
-      to?.setAttribute(attr, value);
-      from.removeAttribute(attr);
-    }
-  });
-}
-
-/**
- * Move instrumentation attributes from a given element to another given element.
- * @param {Element} from the element to copy attributes from
- * @param {Element} to the element to copy attributes to
- */
-export function moveInstrumentation(from, to) {
-  moveAttributes(
-    from,
-    to,
-    [...from.attributes]
-      .map(({ nodeName }) => nodeName)
-      .filter((attr) => attr.startsWith('data-aue-') || attr.startsWith('data-richtext-')),
-  );
-}
 
 /**
  * load fonts.css and set a session storage flag
@@ -307,6 +310,37 @@ function buildAutoBlocks(main) {
   }
 }
 
+// Column-based block variants: in Universal Editor (AEM rendering) the xwalk columns component
+// keeps only its style classes, so e.g. a "columns slider" block arrives as a plain columns block.
+// The style marker names the block; the marker itself is dropped.
+const COLUMNS_VARIANTS = {
+  slider: 'columns-slider',
+  media: 'columns-media',
+  links: 'columns-links',
+};
+
+function resolveColumnsVariants(root) {
+  Object.entries(COLUMNS_VARIANTS).forEach(([marker, blockName]) => {
+    const selector = `div.columns.${marker}, div.${blockName}.${marker}`;
+    const blocks = [...root.querySelectorAll(selector)];
+    if (root.matches && root.matches(selector)) blocks.push(root);
+    blocks.forEach((block) => {
+      block.classList.replace('columns', blockName);
+      block.classList.remove(marker);
+    });
+  });
+}
+
+/**
+ * Decoration that Universal Editor needs again when it re-renders a block or section after an
+ * edit (editor-support.js): column block variants and Dynamic Media image links.
+ * @param {Element} element The re-rendered block, section or default content container
+ */
+export function decorateEditorContent(element) {
+  resolveColumnsVariants(element);
+  buildDynamicMediaImages(element);
+}
+
 // hosts whose links open in a new tab, as on the source site (donation platform)
 const NEW_TAB_HOSTS = ['giving.classy.org'];
 
@@ -342,6 +376,7 @@ function a11yLinks(main) {
  */
 // eslint-disable-next-line import/prefer-default-export
 export function decorateMain(main) {
+  resolveColumnsVariants(main);
   // hopefully forward compatible button decoration
   decorateButtons(main);
   // links in list items (html-sitemap) are plain links, never buttons
