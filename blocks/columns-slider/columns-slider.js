@@ -5,15 +5,65 @@ import { moveInstrumentation } from '../../scripts/scripts.js';
  * columns-slider: two columns - an image slider beside a text column.
  * Content contract: 1 row x 2 cells: [N images, one per paragraph] | [h2 + paragraphs].
  * The image-only cell becomes a center-mode slider (one slide in focus, partial neighbours),
- * navigated by dots (no arrows), swipe / scroll-snap and keyboard.
+ * navigated by dots (no arrows), touch swipe / mouse drag and keyboard.
  */
 
 let instanceId = 0;
 
 const reducedMotion = () => window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-// the source slider auto-advances about every 4s and loops
-const AUTOPLAY_MS = 4000;
+// the source slider (slick, autoplaySpeed 3000 restarted after each 500ms move) starts a move
+// every 3.5s and does not loop: it runs to the last slide, then back to the first (ping-pong)
+const AUTOPLAY_MS = 3500;
+
+// every move takes 500ms whatever the distance, with the CSS 'ease' curve (slick speed / cssEase)
+const TRANSITION_MS = 500;
+
+// a swipe / drag changes the slide once it passes 1/5 of the track width (slick touchThreshold 5)
+const SWIPE_FRACTION = 0.2;
+
+// drags shorter than this are treated as taps / clicks
+const DRAG_START_PX = 5;
+
+// in-flight programmatic scroll animation per track; scroll-sync is ignored while one runs
+const animations = new WeakMap();
+
+/* CSS 'ease' = cubic-bezier(0.25, 0.1, 0.25, 1), solved for x by bisection */
+function ease(t) {
+  const bezier = (p1, p2, s) => 3 * p1 * s * (1 - s) ** 2 + 3 * p2 * s * s * (1 - s) + s ** 3;
+  let lo = 0;
+  let hi = 1;
+  let s = t;
+  for (let i = 0; i < 20; i += 1) {
+    s = (lo + hi) / 2;
+    if (bezier(0.25, 0.25, s) < t) lo = s;
+    else hi = s;
+  }
+  return bezier(0.1, 1, s);
+}
+
+function stopAnimation(track) {
+  cancelAnimationFrame(animations.get(track));
+  animations.delete(track);
+}
+
+/* scroll the track to `left` in TRANSITION_MS (or instantly) */
+function scrollTrack(track, left, smooth) {
+  stopAnimation(track);
+  const from = track.scrollLeft;
+  if (!smooth || Math.abs(left - from) < 1) {
+    track.scrollLeft = left;
+    return;
+  }
+  const t0 = performance.now();
+  const step = (now) => {
+    const progress = Math.min(1, (now - t0) / TRANSITION_MS);
+    track.scrollLeft = from + (left - from) * ease(progress);
+    if (progress < 1) animations.set(track, requestAnimationFrame(step));
+    else animations.delete(track);
+  };
+  animations.set(track, requestAnimationFrame(step));
+}
 
 function setActive(slider, index) {
   slider.querySelectorAll('.columns-slider-slide').forEach((slide, i) => {
@@ -36,11 +86,9 @@ function showSlide(slider, index, smooth = true) {
   const slides = [...track.children];
   if (!slides.length) return;
   const target = Math.max(0, Math.min(index, slides.length - 1));
-  track.scrollTo({
-    left: slideOffset(track, slides[target]),
-    behavior: smooth && !reducedMotion() ? 'smooth' : 'auto',
-  });
+  // the dot changes once, to the target, when the move starts
   setActive(slider, target);
+  scrollTrack(track, slideOffset(track, slides[target]), smooth && !reducedMotion());
 }
 
 /* the slide whose centre is nearest the track's centre is the current one */
@@ -112,6 +160,9 @@ function buildSlider(col, id) {
     return;
   }
 
+  // set once autoplay is wired up: restarts its timer after the user changes the slide
+  let restartAutoplay = () => {};
+
   const nav = document.createElement('div');
   nav.className = 'columns-slider-nav';
   const dots = document.createElement('ol');
@@ -124,7 +175,10 @@ function buildSlider(col, id) {
     btn.className = 'columns-slider-dot';
     btn.setAttribute('aria-label', `Show slide ${i + 1} of ${slides.length}`);
     btn.setAttribute('aria-controls', slide.id);
-    btn.addEventListener('click', () => showSlide(slider, i));
+    btn.addEventListener('click', () => {
+      showSlide(slider, i);
+      restartAutoplay();
+    });
     li.append(btn);
     dots.append(li);
   });
@@ -150,11 +204,73 @@ function buildSlider(col, id) {
   nav.append(dots);
   slider.append(nav);
 
-  // sync the current dot with swipe / scroll-snap
+  // touch swipe / mouse drag: the track follows the pointer; on release it moves one slide on
+  // once the drag passes SWIPE_FRACTION of the track width, otherwise it snaps back
+  let drag = null;
+  let suppressClick = false;
+  track.addEventListener('pointerdown', (e) => {
+    if (e.pointerType === 'mouse' && e.button !== 0) return;
+    drag = {
+      id: e.pointerId,
+      x: e.clientX,
+      left: track.scrollLeft,
+      from: Number(slider.dataset.activeSlide || 0),
+      moved: false,
+    };
+  });
+  track.addEventListener('pointermove', (e) => {
+    if (!drag || e.pointerId !== drag.id) return;
+    const dx = e.clientX - drag.x;
+    if (!drag.moved) {
+      if (Math.abs(dx) < DRAG_START_PX) return;
+      drag.moved = true;
+      // capture only once dragging, so plain clicks / taps keep their target
+      track.setPointerCapture(e.pointerId);
+      slider.classList.add('is-dragging');
+      stopAnimation(track);
+      drag.left = track.scrollLeft;
+    }
+    track.scrollLeft = drag.left - dx;
+  });
+  const endDrag = (e) => {
+    if (!drag || e.pointerId !== drag.id) return;
+    const { moved, from, x } = drag;
+    drag = null;
+    if (!moved) return;
+    slider.classList.remove('is-dragging');
+    const dx = e.type === 'pointercancel' ? 0 : e.clientX - x;
+    const threshold = track.clientWidth * SWIPE_FRACTION;
+    let target = from;
+    if (dx <= -threshold) target = from + 1;
+    else if (dx >= threshold) target = from - 1;
+    showSlide(slider, target);
+    restartAutoplay();
+    // a drag that started on a linked slide must not follow the link on release
+    suppressClick = true;
+    setTimeout(() => {
+      suppressClick = false;
+    });
+  };
+  track.addEventListener('pointerup', endDrag);
+  track.addEventListener('pointercancel', endDrag);
+  track.addEventListener('click', (e) => {
+    if (!suppressClick) return;
+    e.preventDefault();
+    e.stopPropagation();
+  }, true);
+  // no native image / link drag-and-drop while dragging the slides with the mouse
+  track.addEventListener('dragstart', (e) => e.preventDefault());
+
+  // sync the current dot when the track scrolls by other means (e.g. focus moving into a slide);
+  // ignored while a programmatic move or a drag is in flight, so the dot only changes once
+  const busy = () => animations.has(track) || !!(drag && drag.moved);
   let frame;
   track.addEventListener('scroll', () => {
+    if (busy()) return;
     cancelAnimationFrame(frame);
-    frame = requestAnimationFrame(() => setActive(slider, nearestSlide(track)));
+    frame = requestAnimationFrame(() => {
+      if (!busy()) setActive(slider, nearestSlide(track));
+    });
   }, { passive: true });
 
   // keep the current slide centred across layout changes (resize / rotation)
@@ -181,43 +297,57 @@ function buildSlider(col, id) {
     loadAll();
   }
 
-  // autoplay: advance and loop; pauses on hover, keyboard focus and hidden tabs, restarts after a
-  // dot is chosen, and never runs with prefers-reduced-motion
+  // autoplay: ping-pong (first -> last -> first ...); pauses on mouse hover, keyboard focus and
+  // hidden tabs, restarts after a dot / swipe / drag, and never runs with prefers-reduced-motion.
+  // Touch taps do not pause it (hover is mouse-only, and tap focus is not keyboard focus).
   if (!reducedMotion()) {
     let timer = null;
     let hovered = false;
     let focused = false;
+    let direction = 1;
     const stop = () => {
       clearInterval(timer);
       timer = null;
       track.setAttribute('aria-live', 'polite');
     };
+    const advance = () => {
+      if (drag && drag.moved) return;
+      const current = Number(slider.dataset.activeSlide || 0);
+      if (current >= slides.length - 1) direction = -1;
+      else if (current <= 0) direction = 1;
+      showSlide(slider, current + direction);
+    };
     const start = () => {
       stop();
       if (hovered || focused || document.hidden) return;
       track.setAttribute('aria-live', 'off');
-      timer = setInterval(() => {
-        showSlide(slider, (Number(slider.dataset.activeSlide || 0) + 1) % slides.length);
-      }, AUTOPLAY_MS);
+      timer = setInterval(advance, AUTOPLAY_MS);
     };
-    slider.addEventListener('mouseenter', () => {
+    restartAutoplay = start;
+    slider.addEventListener('pointerenter', (e) => {
+      if (e.pointerType !== 'mouse') return;
       hovered = true;
       stop();
     });
-    slider.addEventListener('mouseleave', () => {
+    slider.addEventListener('pointerleave', (e) => {
+      if (e.pointerType !== 'mouse') return;
       hovered = false;
       start();
     });
-    slider.addEventListener('focusin', () => {
+    const keyboardFocus = () => {
       focused = true;
       stop();
+    };
+    slider.addEventListener('focusin', (e) => {
+      if (e.target.matches(':focus-visible')) keyboardFocus();
     });
+    // dots keyboard navigation moves focus programmatically: treat it as keyboard focus too
+    dots.addEventListener('keydown', keyboardFocus);
     slider.addEventListener('focusout', (e) => {
-      if (slider.contains(e.relatedTarget)) return;
+      if (!focused || slider.contains(e.relatedTarget)) return;
       focused = false;
       start();
     });
-    dots.addEventListener('click', start);
     document.addEventListener('visibilitychange', () => (document.hidden ? stop() : start()));
     start();
   }

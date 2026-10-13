@@ -1,11 +1,12 @@
 /*
  * columns-slider: image slider + text columns (source: .mediainfo with a slick image carousel).
  * Values extracted from the source computed styles (migration-work/columns-slider-extracted.css).
- * Source vertical padding is 56px (mobile) / 80px (desktop); the section already adds 40px.
+ * Source vertical padding is 56px (mobile) / 80px (from 768px); the section already adds 32px
+ * below 768px and 40px from 768px (styles.css).
  */
 
 .columns-slider {
-  padding: 16px 0;
+  padding: 24px 0;
   color: var(--text-color);
 }
 
@@ -28,11 +29,15 @@
   order: -1;
 }
 
-/* slider: one full-width slide at a time, no arrows, dots overlaid at the bottom */
+/* slider: one full-width slide at a time, no arrows, dots overlaid at the bottom; swipe / drag
+   is handled in JS (source slick: touch-action pan-y, no text selection, no tap highlight) */
 .columns-slider .columns-slider-slider {
   position: relative;
   width: 100%;
   margin-top: 5px;
+  touch-action: pan-y;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
 }
 
 .columns-slider .columns-slider-slides,
@@ -42,30 +47,17 @@
   padding: 0;
 }
 
-/* the track is as tall as the tallest slide, so the dots sit at the same height for every slide */
+/* the track is as tall as the tallest slide, so the dots sit at the same height for every slide;
+   it only scrolls from JS (500ms moves, drag), never natively */
 .columns-slider .columns-slider-slides {
   position: relative;
   display: flex;
   gap: 0;
-  overflow: auto clip;
-  scroll-snap-type: x mandatory;
-  overscroll-behavior-x: contain;
-  scrollbar-width: none;
-}
-
-.columns-slider .columns-slider-slides::-webkit-scrollbar {
-  display: none;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .columns-slider .columns-slider-slides {
-    scroll-behavior: smooth;
-  }
+  overflow: hidden;
 }
 
 .columns-slider .columns-slider-slide {
   flex: 0 0 100%;
-  scroll-snap-align: center;
   line-height: 0;
 }
 
@@ -154,10 +146,12 @@
   text-decoration: underline;
 }
 
-/* desktop: slider (50%) left, text right, 130px apart, vertically centred */
-@media (width >= 900px) {
+/* from 768px (source col-md-6): slider (50%) left, text right, 130px apart, vertically centred.
+   Source content edge: 39px from 768px (24px gutter + 15px), 24px from 1024px up to the 1280px
+   max width; the section gutter here is 16px below 900px and 32px from 900px (styles.css) */
+@media (width >= 768px) {
   .columns-slider {
-    padding: 40px 0;
+    padding: 40px 23px;
   }
 
   .columns-slider .columns-slider-row {
@@ -183,5 +177,19 @@
 
   .columns-slider .columns-slider-slides {
     gap: 24px;
+  }
+}
+
+@media (width >= 900px) {
+  .columns-slider {
+    padding-inline: 7px;
+  }
+}
+
+/* 8px wider than the 32px-gutter wrapper until the wrapper reaches its max width */
+@media (width >= 1024px) {
+  .columns-slider {
+    margin-inline: max(-8px, (100% - var(--content-max-width)) / 2);
+    padding-inline: 0;
   }
 }
