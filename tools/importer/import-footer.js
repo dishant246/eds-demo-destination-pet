@@ -9,13 +9,16 @@
  *   1. brand   : footer logo
  *   2. columns : per column a bold heading paragraph followed by its links / contact lines
  *   3. bottom  : copyright + social icon links
- * Images reference local files in content/images/ (downloaded separately).
+ * Logo: the source's Scene7 image as a Dynamic Media carrier link (survives the xwalk conversion;
+ * scripts.js turns it into a picture). Social icons: code-repository files under /icons/.
  */
 
+const LOGO_DM_URL = 'https://images.destpet.com/is/image/destpet/DPLogo_Vertical_White';
+
 const SOCIAL_ICONS = {
-  'facebook.com': { src: 'images/icon-facebook.svg', alt: 'Facebook' },
-  'instagram.com': { src: 'images/icon-instagram.svg', alt: 'Instagram' },
-  'linkedin.com': { src: 'images/icon-linkedin.svg', alt: 'LinkedIn' },
+  'facebook.com': { src: '/icons/icon-facebook.svg', alt: 'Facebook' },
+  'instagram.com': { src: '/icons/icon-instagram.svg', alt: 'Instagram' },
+  'linkedin.com': { src: '/icons/icon-linkedin.svg', alt: 'LinkedIn' },
 };
 
 function relHref(href) {
@@ -35,9 +38,10 @@ export default {
     // 1. brand
     const logo = footer.querySelector('.footer__logo img, img');
     const pLogo = document.createElement('p');
-    const img = document.createElement('img');
-    img.src = 'images/destinationpet-logo-white.png';
-    img.alt = (logo && logo.alt) || 'Destination Pet Logo';
+    // Dynamic Media image carrier link: href = Scene7 URL, text = alt
+    const img = document.createElement('a');
+    img.href = LOGO_DM_URL;
+    img.textContent = (logo && logo.alt) || 'Destination Pet Logo';
     pLogo.append(img);
     parts.push(pLogo);
     parts.push(document.createElement('hr'));

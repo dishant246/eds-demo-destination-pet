@@ -1,3 +1,5 @@
+import { decorateEditorContent, wrapInlineRuns } from '../../scripts/scripts.js';
+
 // source switches from the accordion to the 3-column layout at 768px
 const isDesktop = window.matchMedia('(width >= 768px)');
 
@@ -16,14 +18,18 @@ async function fetchFooter() {
 }
 
 /**
- * Rewrites fragment-relative image paths (images/...) against the fragment location.
+ * Rewrites fragment-relative image paths (images/...) against the fragment location and
+ * code-repository icons (/icons/...) against the code base.
  * @param {HTMLElement} root fragment container
  */
 function resolveImages(root) {
   const base = window.location.pathname.startsWith('/content/') ? '/content/' : '/';
   root.querySelectorAll('img').forEach((img) => {
     const src = img.getAttribute('src');
-    if (src && !/^(https?:)?\/\//.test(src) && !src.startsWith('/')) {
+    if (src && src.startsWith('/icons/')) {
+      // code-repository icons: load from the code base (also inside Universal Editor)
+      img.setAttribute('src', `${window.hlx.codeBasePath}${src}`);
+    } else if (src && !/^(https?:)?\/\//.test(src) && !src.startsWith('/')) {
       img.setAttribute('src', `${base}${src}`);
     }
   });
@@ -131,6 +137,10 @@ export default async function decorate(block) {
   const fragment = await fetchFooter();
   block.textContent = '';
   if (!fragment) return;
+  // AEM (xwalk) stores bold-only headings as bare <strong>: give them their paragraph back
+  [...fragment.children].forEach(wrapInlineRuns);
+  // Scene7 logo link -> picture, empty richtext paragraphs (same as page content)
+  decorateEditorContent(fragment);
   resolveImages(fragment);
   decorateLinks(fragment);
 

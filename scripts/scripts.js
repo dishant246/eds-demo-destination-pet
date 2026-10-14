@@ -156,7 +156,9 @@ function renderScene7Picture(src, alt) {
   const picture = document.createElement('picture');
   DM_BREAKPOINTS.forEach((bp) => appendSource(picture, {
     type: 'image/webp',
-    srcset: buildScene7Rendition(src, { width: bp.width, format: 'webp' }),
+    // webp-alpha keeps transparent logos/icons transparent (plain webp fills them white); opaque
+    // photos come back the same size
+    srcset: buildScene7Rendition(src, { width: bp.width, format: 'webp-alpha' }),
     media: bp.media,
   }));
   DM_BREAKPOINTS.forEach((bp) => appendSource(picture, {
@@ -331,12 +333,71 @@ function resolveColumnsVariants(root) {
   });
 }
 
+// The xwalk richtext conversion stores headings and lists wrapped in a paragraph
+// (<p><h2>…</h2></p>), which the HTML parser splits into empty <p> elements around them.
+function removeEmptyParagraphs(root) {
+  root.querySelectorAll('p').forEach((p) => {
+    if (!p.attributes.length && !p.children.length && !p.textContent.trim()) p.remove();
+  });
+}
+
+/**
+ * Gives headings without an id the slug id the HTML pipeline generates for imported content
+ * (github-slugger style: "West Chester / Ohio" -> "west-chester--ohio"), so in-page anchors
+ * (#ohio) and id-based styles also work for content rendered by AEM.
+ * @param {Element} root container
+ */
+function addHeadingIds(root) {
+  const used = new Set([...document.querySelectorAll('[id]')].map((e) => e.id));
+  root.querySelectorAll('h1, h2, h3, h4, h5, h6').forEach((h) => {
+    if (h.id) return;
+    const base = h.textContent.trim().toLowerCase()
+      .replace(/[^\p{L}\p{M}\p{N}\p{Pc} -]/gu, '')
+      .replace(/ /g, '-');
+    if (!base) return;
+    let id = base;
+    for (let i = 1; used.has(id); i += 1) id = `${base}-${i}`;
+    used.add(id);
+    h.id = id;
+  });
+}
+
+const BLOCK_LEVEL_TAGS = ['P', 'DIV', 'H1', 'H2', 'H3', 'H4', 'H5', 'H6', 'UL', 'OL', 'TABLE',
+  'BLOCKQUOTE', 'PRE', 'HR', 'FIGURE', 'PICTURE', 'IMG'];
+
+/**
+ * Wraps runs of inline content (text, <strong>, <a>…) that sit directly in a container into a
+ * <p>: the xwalk richtext conversion stores a paragraph that is entirely bold as a bare
+ * <strong> (no <p>), which would otherwise lose paragraph styling.
+ * @param {Element} container A section (or fragment section) element
+ */
+export function wrapInlineRuns(container) {
+  let run = [];
+  const flush = () => {
+    if (run.some((n) => n.nodeType === Node.ELEMENT_NODE || n.textContent.trim())) {
+      const p = document.createElement('p');
+      run[0].before(p);
+      p.append(...run);
+    }
+    run = [];
+  };
+  [...container.childNodes].forEach((node) => {
+    const isElement = node.nodeType === Node.ELEMENT_NODE;
+    if (isElement && BLOCK_LEVEL_TAGS.includes(node.tagName)) flush();
+    else if (isElement || node.nodeType === Node.TEXT_NODE) run.push(node);
+  });
+  flush();
+}
+
 /**
  * Decoration that Universal Editor needs again when it re-renders a block or section after an
- * edit (editor-support.js): column block variants and Dynamic Media image links.
+ * edit (editor-support.js): empty richtext paragraphs, column block variants and Dynamic Media
+ * image links.
  * @param {Element} element The re-rendered block, section or default content container
  */
 export function decorateEditorContent(element) {
+  removeEmptyParagraphs(element);
+  addHeadingIds(element);
   resolveColumnsVariants(element);
   buildDynamicMediaImages(element);
 }
@@ -376,6 +437,13 @@ function a11yLinks(main) {
  */
 // eslint-disable-next-line import/prefer-default-export
 export function decorateMain(main) {
+  // page metadata is never content: AEM renders it into <head>; the import keeps the metadata
+  // table in the last content section (no empty trailing section), so drop it if a local
+  // preview leaves it in <main>
+  main.querySelectorAll('div.metadata').forEach((metadata) => metadata.remove());
+  removeEmptyParagraphs(main);
+  main.querySelectorAll(':scope > div').forEach(wrapInlineRuns);
+  addHeadingIds(main);
   resolveColumnsVariants(main);
   // hopefully forward compatible button decoration
   decorateButtons(main);

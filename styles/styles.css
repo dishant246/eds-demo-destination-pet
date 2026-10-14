@@ -278,6 +278,13 @@ main > .section:first-of-type {
   margin-top: 0;
 }
 
+/* an empty unstyled section (a hub page with no body content) takes no space on the site; in
+   Universal Editor (instrumented) it stays visible so authors can add content to it. Styled empty
+   sections keep their padding (source CCPA request body is an empty 114px band) */
+main > .section[class="section"]:empty:not([data-aue-resource]) {
+  display: none;
+}
+
 @media (width >= 900px) {
   main > .section > div {
     padding: 0 32px;

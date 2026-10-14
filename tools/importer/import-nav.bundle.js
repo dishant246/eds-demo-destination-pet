@@ -23,10 +23,11 @@ var CustomImportScript = (() => {
   __export(import_nav_exports, {
     default: () => import_nav_default
   });
+  var LOGO_DM_URL = "https://images.destpet.com/is/image/destpet/DPLogo_Horizontal_FullColor";
   var SOCIAL_ICONS = {
-    "facebook.com": { src: "images/icon-facebook.svg", alt: "Facebook" },
-    "instagram.com": { src: "images/icon-instagram.svg", alt: "Instagram" },
-    "linkedin.com": { src: "images/icon-linkedin.svg", alt: "LinkedIn" }
+    "facebook.com": { src: "/icons/icon-facebook.svg", alt: "Facebook" },
+    "instagram.com": { src: "/icons/icon-instagram.svg", alt: "Instagram" },
+    "linkedin.com": { src: "/icons/icon-linkedin.svg", alt: "LinkedIn" }
   };
   function relHref(href) {
     if (!href) return "#";
@@ -62,10 +63,8 @@ var CustomImportScript = (() => {
       const p = document.createElement("p");
       const a = document.createElement("a");
       a.href = "/";
-      const img = document.createElement("img");
-      img.src = "images/destinationpet-logo.png";
-      img.alt = logoImg && logoImg.alt || "Destination Pet Logo";
-      a.append(img);
+      a.title = LOGO_DM_URL;
+      a.textContent = logoImg && logoImg.alt || "Destination Pet Logo";
       p.append(a);
       brand.append(p);
       out.append(brand);

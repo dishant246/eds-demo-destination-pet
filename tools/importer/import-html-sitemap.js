@@ -121,8 +121,8 @@ export default {
     executeTransformers('afterTransform', main, payload);
 
     // 5. WebImporter built-in rules
-    const hr = document.createElement('hr');
-    main.appendChild(hr);
+    // no closing <hr> before the metadata: in the xwalk conversion it would leave an empty last
+    // section on every page (blank space above the footer, an empty section in Universal Editor)
     WebImporter.rules.createMetadata(main, document);
     WebImporter.rules.transformBackgroundImages(main, document);
     WebImporter.rules.adjustImageUrls(main, url, params.originalURL);

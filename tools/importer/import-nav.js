@@ -9,14 +9,17 @@
  *   1. brand  : linked logo
  *   2. nav    : top-level links; "About us" with nested dropdown + "Meet The Team" flyout
  *   3. social : ribbon social icon links
- * Images reference local files in content/images/ (downloaded separately).
+ * Logo: the source's Scene7 image as a Dynamic Media carrier link (survives the xwalk conversion;
+ * scripts.js turns it into a picture). Social icons: code-repository files under /icons/.
  */
+
+const LOGO_DM_URL = 'https://images.destpet.com/is/image/destpet/DPLogo_Horizontal_FullColor';
 
 // keyed by social host (icon-font <em> carriers are stripped before transform runs)
 const SOCIAL_ICONS = {
-  'facebook.com': { src: 'images/icon-facebook.svg', alt: 'Facebook' },
-  'instagram.com': { src: 'images/icon-instagram.svg', alt: 'Instagram' },
-  'linkedin.com': { src: 'images/icon-linkedin.svg', alt: 'LinkedIn' },
+  'facebook.com': { src: '/icons/icon-facebook.svg', alt: 'Facebook' },
+  'instagram.com': { src: '/icons/icon-instagram.svg', alt: 'Instagram' },
+  'linkedin.com': { src: '/icons/icon-linkedin.svg', alt: 'LinkedIn' },
 };
 
 function relHref(href) {
@@ -60,10 +63,9 @@ export default {
     const p = document.createElement('p');
     const a = document.createElement('a');
     a.href = '/';
-    const img = document.createElement('img');
-    img.src = 'images/destinationpet-logo.png';
-    img.alt = (logoImg && logoImg.alt) || 'Destination Pet Logo';
-    a.append(img);
+    // linked Dynamic Media image: the link title carries the Scene7 URL, the text is the alt
+    a.title = LOGO_DM_URL;
+    a.textContent = (logoImg && logoImg.alt) || 'Destination Pet Logo';
     p.append(a);
     brand.append(p);
     out.append(brand);
